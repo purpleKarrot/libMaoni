@@ -7,7 +7,6 @@
 
 #include <Maoni.hpp>
 #include <cmath>
-#include "Teaset.h"
 
 static void qglviewer_spiral()
 {
