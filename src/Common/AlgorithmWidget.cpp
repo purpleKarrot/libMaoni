@@ -61,6 +61,9 @@ AlgorithmWidget::AlgorithmWidget(FrameData& framedata, QWidget *parent) :
 	enum_manager = new QtEnumPropertyManager(this);
 	color_manager = new QtColorPropertyManager(this);
 	filepath_manager = new FilePathManager(this);
+	vector2d_manager = new QVector2DPropertyManager(this);
+	vector3d_manager = new QVector3DPropertyManager(this);
+	vector4d_manager = new QVector4DPropertyManager(this);
 
 	connect(int_manager, SIGNAL(valueChanged(QtProperty*, int)), this,
 			SLOT(value_changed(QtProperty*, int)));
@@ -74,6 +77,12 @@ AlgorithmWidget::AlgorithmWidget(FrameData& framedata, QWidget *parent) :
 			SLOT(value_changed(QtProperty*, QColor)));
 	connect(filepath_manager, SIGNAL(valueChanged(QtProperty*, QString)), this,
 			SLOT(value_changed(QtProperty*, QString)));
+	connect(vector2d_manager, SIGNAL(valueChanged(QtProperty*, Vec2)), this,
+			SLOT(value_changed(QtProperty*, Vec2)));
+	connect(vector3d_manager, SIGNAL(valueChanged(QtProperty*, Vec3)), this,
+			SLOT(value_changed(QtProperty*, Vec3)));
+	connect(vector4d_manager, SIGNAL(valueChanged(QtProperty*, Vec4)), this,
+			SLOT(value_changed(QtProperty*, Vec4)));
 
 	QtDoubleSpinBoxFactory* double_factory = new QtDoubleSpinBoxFactory(this);
 	QtCheckBoxFactory* bool_factory = new QtCheckBoxFactory(this);
@@ -91,6 +100,12 @@ AlgorithmWidget::AlgorithmWidget(FrameData& framedata, QWidget *parent) :
 	property_browser->setFactoryForManager(
 			color_manager->subIntPropertyManager(), int_factory);
 	property_browser->setFactoryForManager(filepath_manager, filepath_factory);
+	property_browser->setFactoryForManager(
+			vector2d_manager->subDoublePropertyManager(), double_factory);
+	property_browser->setFactoryForManager(
+			vector3d_manager->subDoublePropertyManager(), double_factory);
+	property_browser->setFactoryForManager(
+			vector4d_manager->subDoublePropertyManager(), double_factory);
 
 	QVBoxLayout* layout = new QVBoxLayout;
 
@@ -111,6 +126,9 @@ void AlgorithmWidget::update_browser()
 	double_pointers.clear();
 	color_pointers.clear();
 	path_pointers.clear();
+	vec2_pointers.clear();
+	vec3_pointers.clear();
+	vec4_pointers.clear();
 
 	property_browser->clear();
 
@@ -136,7 +154,7 @@ void AlgorithmWidget::choose(int index)
 
 void AlgorithmWidget::property(const char* name, int& value)
 {
-	QtProperty* property = int_manager->addProperty(name);
+	QtProperty* property = int_manager->addProperty(nice_name(name));
 	int_manager->setValue(property, value);
 	property_browser->addProperty(property);
 	int_pointers[property] = &value;
@@ -144,7 +162,7 @@ void AlgorithmWidget::property(const char* name, int& value)
 
 void AlgorithmWidget::property(const char* name, bool& value)
 {
-	QtProperty* property = bool_manager->addProperty(name);
+	QtProperty* property = bool_manager->addProperty(nice_name(name));
 	bool_manager->setValue(property, value);
 	property_browser->addProperty(property);
 	bool_pointers[property] = &value;
@@ -152,7 +170,7 @@ void AlgorithmWidget::property(const char* name, bool& value)
 
 void AlgorithmWidget::property(const char* name, float& value)
 {
-	QtProperty* property = double_manager->addProperty(name);
+	QtProperty* property = double_manager->addProperty(nice_name(name));
 	double_manager->setValue(property, value);
 	property_browser->addProperty(property);
 	float_pointers[property] = &value;
@@ -160,7 +178,7 @@ void AlgorithmWidget::property(const char* name, float& value)
 
 void AlgorithmWidget::property(const char* name, double& value)
 {
-	QtProperty* property = double_manager->addProperty(name);
+	QtProperty* property = double_manager->addProperty(nice_name(name));
 	double_manager->setValue(property, value);
 	property_browser->addProperty(property);
 	double_pointers[property] = &value;
@@ -172,7 +190,7 @@ void AlgorithmWidget::property(const char* name, Enum& value)
 	for (int i = 0; i < value.size(); ++i)
 		enums << value.names()[i];
 
-	QtProperty* property = enum_manager->addProperty(name);
+	QtProperty* property = enum_manager->addProperty(nice_name(name));
 	enum_manager->setValue(property, value);
 	enum_manager->setEnumNames(property, enums);
 	property_browser->addProperty(property);
@@ -181,16 +199,40 @@ void AlgorithmWidget::property(const char* name, Enum& value)
 
 void AlgorithmWidget::property(const char* name, Color& value)
 {
-	QtProperty* property = color_manager->addProperty(name);
+	QtProperty* property = color_manager->addProperty(nice_name(name));
 	color_manager->setValue(property, QColor(value.red() * 255, value.green()
 			* 255, value.blue() * 255, value.alpha() * 255));
 	property_browser->addProperty(property);
 	color_pointers[property] = &value;
 }
 
+void AlgorithmWidget::property(const char* name, Vec2& value)
+{
+	QtProperty* property = vector2d_manager->addProperty(nice_name(name));
+	vector2d_manager->setValue(property, value);
+	property_browser->addProperty(property);
+	vec2_pointers[property] = &value;
+}
+
+void AlgorithmWidget::property(const char* name, Vec3& value)
+{
+	QtProperty* property = vector3d_manager->addProperty(nice_name(name));
+	vector3d_manager->setValue(property, value);
+	property_browser->addProperty(property);
+	vec3_pointers[property] = &value;
+}
+
+void AlgorithmWidget::property(const char* name, Vec4& value)
+{
+	QtProperty* property = vector4d_manager->addProperty(nice_name(name));
+	vector4d_manager->setValue(property, value);
+	property_browser->addProperty(property);
+	vec4_pointers[property] = &value;
+}
+
 void AlgorithmWidget::property(const char* name, Path& value)
 {
-	QtProperty* property = filepath_manager->addProperty(name);
+	QtProperty* property = filepath_manager->addProperty(nice_name(name));
 	filepath_manager->setValue(property, QString::fromStdString(value.path()));
 	filepath_manager->setFilter(property, value.filter());
 	property_browser->addProperty(property);
@@ -230,9 +272,38 @@ void AlgorithmWidget::value_changed(QtProperty* property, const QColor& value)
 	framedata.setRenderParamChanged();
 }
 
+void AlgorithmWidget::value_changed(QtProperty* property, const Vec2& value)
+{
+	if (vec2_pointers.contains(property))
+		*vec2_pointers[property] = value;
+	framedata.setRenderParamChanged();
+}
+
+void AlgorithmWidget::value_changed(QtProperty* property, const Vec3& value)
+{
+	if (vec3_pointers.contains(property))
+		*vec3_pointers[property] = value;
+	framedata.setRenderParamChanged();
+}
+
+void AlgorithmWidget::value_changed(QtProperty* property, const Vec4& value)
+{
+	if (vec4_pointers.contains(property))
+		*vec4_pointers[property] = value;
+	framedata.setRenderParamChanged();
+}
+
 void AlgorithmWidget::value_changed(QtProperty* property, const QString& value)
 {
 	if (path_pointers.contains(property))
 		path_pointers[property]->path(value.toStdString());
 	framedata.setRenderParamChanged();
+}
+
+// replaces underscores in render algorithms variable names by blanks
+const QString AlgorithmWidget::nice_name(const char* name)
+{
+	std::string to_replace(name);
+	replace( to_replace.begin(), to_replace.end(), '_', ' ' );
+	return QString(to_replace.c_str());
 }
