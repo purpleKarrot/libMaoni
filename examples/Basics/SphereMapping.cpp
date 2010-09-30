@@ -3,8 +3,6 @@
  */
 
 #include <Maoni.hpp>
-#include "../Loaders/VBOModel.hpp"
-
 
 SHADER_SOURCE(vertex_source, (version 120),
 

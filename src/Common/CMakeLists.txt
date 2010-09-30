@@ -44,7 +44,8 @@ add_library(Common STATIC
   ${COMMON_QRC}
   AlgorithmWidget.cpp
   AnimationWidget.cpp
-  Bunny.cpp
+  BunnyModel.cpp
+  BezierModel.cpp
   FrameData.cpp
   LightWidget.cpp
   Logo.cpp
@@ -52,6 +53,7 @@ add_library(Common STATIC
   Path.cpp
   RenderWidget.cpp
   ShaderProgram.cpp
+  Teaset.c
   Texture.cpp
   )
 

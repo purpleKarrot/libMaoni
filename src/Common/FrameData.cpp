@@ -20,7 +20,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/serialization/vector.hpp>
 #include "serialize.hpp"
-#include "Bunny.hpp"
+#include "BunnyModel.hpp"
 #include <fstream>
 
 FrameData::FrameData(RenderAlgorithm* algorithm_stack,

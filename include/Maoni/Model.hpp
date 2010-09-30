@@ -40,6 +40,10 @@ public:
 	{
 	}
 
+	virtual ~Model()
+	{
+	}
+
 	//! Draw the model
 	virtual void draw() const
 	{
