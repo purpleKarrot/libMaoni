@@ -45,7 +45,6 @@ add_library(Common STATIC
   AlgorithmWidget.cpp
   AnimationWidget.cpp
   BunnyModel.cpp
-  BezierModel.cpp
   FrameData.cpp
   LightWidget.cpp
   Logo.cpp
