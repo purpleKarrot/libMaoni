@@ -78,9 +78,11 @@ set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/src/Icons/stanford-bunny.ico")
 
 set(CPACK_DEBIAN_BUILD_DEPENDS
   libqt4-dev
+  libqt4-opengl-dev
   libboost-all-dev
   libglew1.5-dev
-  libopenmpi-dev
+  doxygen
+  xsltproc
   )
 
 set(DPUT_HOST "ppa:purplekarrot/ppa")
