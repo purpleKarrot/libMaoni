@@ -28,6 +28,10 @@ macro(MAONI_MODULE NAME)
   add_dependencies(examples ${NAME})
   target_link_libraries(${NAME} Maoni MaoniMain)
   
+  add_executable(${NAME}_IceT EXCLUDE_FROM_ALL ${SOURCES})
+  add_dependencies(examples ${NAME}_IceT)
+  target_link_libraries(${NAME}_IceT MaoniIceT MaoniMain)
+  
 endmacro(MAONI_MODULE NAME)
 
 # search all subdirectories for examples

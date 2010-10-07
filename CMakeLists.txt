@@ -19,7 +19,7 @@ endif(NOT WIN32)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CToolBox)
-
+include(DailyVersion)
 
 include_directories(BEFORE SYSTEM include)
 install(DIRECTORY include/Maoni DESTINATION include COMPONENT headers)
@@ -48,9 +48,9 @@ set(CPACK_PACKAGE_VENDOR "http://github.com/purpleKarrot/libMaoni")
 set(CPACK_PACKAGE_CONTACT "Daniel Pfeifer <daniel@pfeifer-mail.de>")
 set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_SOURCE_DIR}/README.rst)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "common viewing framework")
-set(CPACK_PACKAGE_VERSION_MAJOR "0")
-set(CPACK_PACKAGE_VERSION_MINOR "8")
-set(CPACK_PACKAGE_VERSION_PATCH "15")
+set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Maoni")
 
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/COPYING)
@@ -76,16 +76,14 @@ set(CPACK_COMPONENT_EXAMPLES_DESCRIPTION
 
 set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/src/Icons/stanford-bunny.ico")
 
-set(CPACK_DPUT_HOST "ppa:purplekarrot/ppa")
-
 set(CPACK_DEBIAN_BUILD_DEPENDS
   libqt4-dev
-  libqglviewer-qt4-dev
-  libboost1.40-dev
-  libboost-serialization1.40-dev
+  libboost-all-dev
   libglew1.5-dev
   libopenmpi-dev
   )
 
-#todo: http://www.itk.org/Wiki/CMake:Component_Install_With_CPack
+set(DPUT_HOST "ppa:purplekarrot/ppa")
+
 include(CPack)
+include(UploadPPA)
