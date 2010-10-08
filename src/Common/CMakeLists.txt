@@ -14,7 +14,7 @@ configure_file(
 
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/glew-1.5.5/include/GL/glew.h
-  DESTINATION include/Maoni COMPONENT headers
+  DESTINATION include/Maoni COMPONENT dev
   )
 
 include_directories(

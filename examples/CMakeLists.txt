@@ -12,26 +12,52 @@ add_custom_target(examples)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Data)
 
 macro(MAONI_MODULE NAME)
-  parse_arguments(MODULE "SOURCE;DATA" "" ${ARGN})
+  set(MODULE_SOURCE_PATH ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_source)
+  set(MODULE_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_binary)
+  set(MODULE_LISTS_FILE ${MODULE_SOURCE_PATH}/CMakeLists.txt)
+
+  parse_arguments(MODULE "INCLUDE_DIRECTORIES;SOURCE;DATA" "" ${ARGN})
 
   foreach(FILE ${MODULE_DATA})
     file(COPY ${MODULE_PATH}/${FILE}
       DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Data)
+    install(FILES ${MODULE_PATH}/${FILE}
+      DESTINATION share/Maoni/data COMPONENT examples)
   endforeach(FILE ${MODULE_DATA})
+
+  set(INCLUDES)
+  foreach(DIRECTORY ${MODULE_INCLUDE_DIRECTORIES})
+    if(IS_ABSOLUTE ${DIRECTORY})
+      set(INCLUDES "${INCLUDES} ${DIRECTORY}")
+    else(IS_ABSOLUTE ${DIRECTORY})
+      set(INCLUDES "${INCLUDES} ${MODULE_PATH}/${DIRECTORY}")
+    endif(IS_ABSOLUTE ${DIRECTORY})
+  endforeach(DIRECTORY ${MODULE_INCLUDE_DIRECTORIES})
+
+  file(WRITE ${MODULE_LISTS_FILE} "# ${NAME}\n\n")
+  if(INCLUDES)
+    file(APPEND ${MODULE_LISTS_FILE} "include_directories(${INCLUDES})\n\n")
+  endif(INCLUDES)
 
   set(SOURCES)
   foreach(FILE ${MODULE_SOURCE})
-    list(APPEND SOURCES ${MODULE_PATH}/${FILE})
+    install(FILES ${MODULE_PATH}/${FILE}
+      DESTINATION share/Maoni/${NAME} COMPONENT examples)
+    file(RELATIVE_PATH FILE ${MODULE_SOURCE_PATH} ${MODULE_PATH}/${FILE})
+    set(SOURCES "${SOURCES}\n  ${FILE}")
   endforeach(FILE ${MODULE_SOURCE})
 
-  add_executable(${NAME} EXCLUDE_FROM_ALL ${SOURCES})
-  add_dependencies(examples ${NAME})
-  target_link_libraries(${NAME} Maoni MaoniMain)
-  
-  add_executable(${NAME}_IceT EXCLUDE_FROM_ALL ${SOURCES})
-  add_dependencies(examples ${NAME}_IceT)
-  target_link_libraries(${NAME}_IceT MaoniIceT MaoniMain)
-  
+  file(APPEND ${MODULE_LISTS_FILE}
+    "add_executable(${NAME} EXCLUDE_FROM_ALL ${SOURCES})\n\n"
+    "add_dependencies(examples ${NAME})\n"
+    "target_link_libraries(${NAME} lib_Maoni_shared lib_MaoniMain_static)\n"
+    )
+
+#  "add_executable(${NAME}_IceT EXCLUDE_FROM_ALL ${SOURCES})\n"
+#  "add_dependencies(examples ${NAME}_IceT)\n"
+#  "target_link_libraries(${NAME}_IceT MaoniIceT MaoniMain)\n"
+
+  add_subdirectory(${MODULE_SOURCE_PATH} ${MODULE_BINARY_PATH})
 endmacro(MAONI_MODULE NAME)
 
 # search all subdirectories for examples

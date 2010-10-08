@@ -3,7 +3,6 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(Maoni)
 
-#set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 if(MSVC)
@@ -22,8 +21,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CToolBox)
 include(DailyVersion)
 
 include_directories(BEFORE SYSTEM include)
-install(DIRECTORY include/Maoni DESTINATION include COMPONENT headers)
-install(FILES include/Maoni.hpp DESTINATION include COMPONENT headers)
+install(DIRECTORY include/Maoni DESTINATION include COMPONENT dev)
+install(FILES include/Maoni.hpp DESTINATION include COMPONENT dev)
 
 option(MAONI_SKIP_EQUALIZER "Do not build libMaoniEq" OFF)
 option(MAONI_SKIP_ICET "Do not build libMaoniIceT" OFF)
@@ -46,7 +45,7 @@ SET(CPACK_SOURCE_IGNORE_FILES "/[.][^/]*;${CMAKE_BINARY_DIR}/")
 set(CPACK_PACKAGE_NAME "libMaoni")
 set(CPACK_PACKAGE_VENDOR "http://github.com/purpleKarrot/libMaoni")
 set(CPACK_PACKAGE_CONTACT "Daniel Pfeifer <daniel@pfeifer-mail.de>")
-set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_SOURCE_DIR}/README.rst)
+set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_SOURCE_DIR}/README.txt)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "common viewing framework")
 set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
@@ -55,20 +54,11 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY "Maoni")
 
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/COPYING)
 
-set(CPACK_COMPONENTS_ALL headers devlibs runlibs examples)
+set(CPACK_COMPONENTS_ALL dev examples)
 
-set(CPACK_COMPONENT_HEADERS_GROUP dev)
-set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "C++ Headers")
-set(CPACK_COMPONENT_HEADERS_DESCRIPTION
-  "C++ header files for use with Maoni")
-
-set(CPACK_COMPONENT_DEVLIBS_DISPLAY_NAME "Developer Libraries")
-set(CPACK_COMPONENT_DEVLIBS_DESCRIPTION
-  "Libraries used to build programs with Maoni")
-
-set(CPACK_COMPONENT_RUNLIBS_DISPLAY_NAME "Runtime Libraries")
-set(CPACK_COMPONENT_RUNLIBS_DESCRIPTION
-  "Libraries used to run Maoni based programs")
+set(CPACK_COMPONENT_DEV_DISPLAY_NAME "Headers and Libraries")
+set(CPACK_COMPONENT_DEV_DESCRIPTION
+  "Header Files and Developer Libraries")
 
 set(CPACK_COMPONENT_EXAMPLES_DISPLAY_NAME "Examples")
 set(CPACK_COMPONENT_EXAMPLES_DESCRIPTION
@@ -81,6 +71,7 @@ set(CPACK_DEBIAN_BUILD_DEPENDS
   libqt4-opengl-dev
   libboost-all-dev
   libglew1.5-dev
+  equalizer
   doxygen
   xsltproc
   )

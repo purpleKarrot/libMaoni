@@ -1,5 +1,7 @@
 # Copyright (c) 2009-2010 Daniel Pfeifer, University of Zurich
 
+include(PurpleLibrary)
+
 set(QT_USE_QTXML ON)
 set(QT_USE_QTOPENGL ON)
 find_package(Qt4 REQUIRED)
@@ -55,13 +57,11 @@ endif(MSVC)
 add_subdirectory(IceT)
 
 
-add_library(Maoni SHARED Maoni.cpp ${MAONI_VERSION_RC})
-target_link_libraries(Maoni ${MAONI_LIBRARIES})
+purple_library(Maoni SHARED
+  SOURCES Maoni.cpp ${MAONI_VERSION_RC}
+  DEPENDS ${MAONI_LIBRARIES}
+  )
 
-add_library(MaoniMain STATIC main.cpp)
-
-install(TARGETS Maoni MaoniMain
-  RUNTIME DESTINATION bin COMPONENT runlibs
-  LIBRARY DESTINATION lib COMPONENT devlibs
-  ARCHIVE DESTINATION lib COMPONENT devlibs
+purple_library(MaoniMain STATIC
+  SOURCES main.cpp
   )
