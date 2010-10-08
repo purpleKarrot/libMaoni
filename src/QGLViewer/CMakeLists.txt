@@ -1,10 +1,7 @@
 # Copyright (c) 2010 Daniel Pfeifer, University of Zurich
 
-if(NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/qglviewer.h)
-  execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf
-    ${CMAKE_CURRENT_SOURCE_DIR}/libQGLViewer-2.3.6.tar.gz
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-endif(NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/qglviewer.h)
+include(Extract)
+extract(libQGLViewer-2.3.6.tar.gz ${CMAKE_CURRENT_BINARY_DIR})
 
 add_definitions(-DNO_VECTORIAL_RENDER)
 
