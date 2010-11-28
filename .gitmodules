@@ -1,6 +1,3 @@
-[submodule "CToolBox"]
-	path = CToolBox
-	url = git://github.com/purpleKarrot/CToolBox.git
 [submodule "examples/GameOfLife"]
 	path = examples/GameOfLife
 	url = git://github.com/shutter/MaoniOfLife.git

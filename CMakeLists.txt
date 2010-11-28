@@ -16,8 +16,7 @@ if(NOT WIN32)
 endif(NOT WIN32)
 
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CToolBox)
+list(APPEND CMAKE_MODULE_PATH ${Maoni_SOURCE_DIR}/CMake)
 include(DailyVersion)
 
 include_directories(BEFORE SYSTEM include)
@@ -29,7 +28,6 @@ option(MAONI_SKIP_ICET "Do not build libMaoniIceT" OFF)
 
 add_subdirectory(src)
 add_subdirectory(examples)
-add_custom_target(check)
 
 
 # Building of Documentation is tested on Linux only
@@ -45,14 +43,14 @@ SET(CPACK_SOURCE_IGNORE_FILES "/[.][^/]*;${CMAKE_BINARY_DIR}/")
 set(CPACK_PACKAGE_NAME "libMaoni")
 set(CPACK_PACKAGE_VENDOR "http://github.com/purpleKarrot/libMaoni")
 set(CPACK_PACKAGE_CONTACT "Daniel Pfeifer <daniel@pfeifer-mail.de>")
-set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_SOURCE_DIR}/README.txt)
+set(CPACK_PACKAGE_DESCRIPTION_FILE ${Maoni_SOURCE_DIR}/README.txt)
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "common viewing framework")
 set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Maoni")
 
-set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/COPYING)
+set(CPACK_RESOURCE_FILE_LICENSE ${Maoni_SOURCE_DIR}/COPYING)
 
 set(CPACK_COMPONENTS_ALL dev examples)
 
