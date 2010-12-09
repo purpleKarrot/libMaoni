@@ -1,3 +1,12 @@
-[submodule "CToolBox"]
-	path = CToolBox
-	url = git://github.com/purpleKarrot/CToolBox.git
+[submodule "examples/GameOfLife"]
+	path = examples/GameOfLife
+	url = git://github.com/shutter/MaoniOfLife.git
+[submodule "examples/OpenAL"]
+	path = examples/OpenAL
+	url = git://github.com/shutter/MaoniSimpleAL.git
+[submodule "examples/Texturing"]
+	path = examples/Texturing
+	url = git://github.com/purpleKarrot/Maoni-Texturing.git
+[submodule "examples/Other"]
+	path = examples/Other
+	url = git://github.com/purpleKarrot/Maoni-Other.git

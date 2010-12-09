@@ -20,7 +20,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/serialization/vector.hpp>
 #include "serialize.hpp"
-#include "Bunny.hpp"
+#include "BunnyModel.hpp"
 #include <fstream>
 
 FrameData::FrameData(RenderAlgorithm* algorithm_stack,
@@ -45,9 +45,10 @@ void FrameData::init()
 
 	//! light 0 defaults
 	lights[0].enabled = true;
-	lights[0].position = Vec3(1.0, 0.0, 1.0);
-	lights[0].diffuse = Color(1.0, 0.0, 0.0, 1.0);
-	lights[0].specular = Color(1.0, 1.0, 0.0, 1.0);
+	lights[0].ambient = Color(0.0, 0.0, 0.0, 1.0);
+	lights[0].position = Vec3(1.0, 1.0, 0.0);
+	lights[0].diffuse = Color(1.0, 1.0, 1.0, 1.0);
+	lights[0].specular = Color(1.0, 1.0, 1.0, 1.0);
 
 	model_.reset(new Bunny);
 }

@@ -1,6 +1,7 @@
 # Copyright (c) 2009 Daniel Pfeifer, University of Zurich
 
-##############################################################
+include(ParseArguments)
+
 find_package(Boost REQUIRED)
 include_directories(
   ${Boost_INCLUDE_DIRS}
@@ -8,85 +9,60 @@ include_directories(
   )
 
 add_custom_target(examples)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Data)
 
-macro(add_example NAME)
-  add_executable(${NAME} EXCLUDE_FROM_ALL ${ARGN})
-  add_dependencies(examples ${NAME})
-endmacro(add_example NAME)
+macro(MAONI_MODULE NAME)
+  set(MODULE_SOURCE_PATH ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_source)
+  set(MODULE_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_binary)
+  set(MODULE_LISTS_FILE ${MODULE_SOURCE_PATH}/CMakeLists.txt)
 
-##############################################################
-# example without source
+  parse_arguments(MODULE "INCLUDE_DIRECTORIES;SOURCE;DATA" "" ${ARGN})
 
-set(EMPTY_SOURCE_FILE ${CMAKE_CURRENT_BINARY_DIR}/empty.c)
-file(WRITE ${EMPTY_SOURCE_FILE} "")
-add_example(example_nothing ${EMPTY_SOURCE_FILE})
-target_link_libraries(example_nothing Maoni MaoniMain)
+  foreach(FILE ${MODULE_DATA})
+    file(COPY ${MODULE_PATH}/${FILE}
+      DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Data)
+    install(FILES ${MODULE_PATH}/${FILE}
+      DESTINATION share/Maoni/data COMPONENT examples)
+  endforeach(FILE ${MODULE_DATA})
 
-##############################################################
-# example with algorithms
+  set(INCLUDES)
+  foreach(DIRECTORY ${MODULE_INCLUDE_DIRECTORIES})
+    if(IS_ABSOLUTE ${DIRECTORY})
+      set(INCLUDES "${INCLUDES} ${DIRECTORY}")
+    else(IS_ABSOLUTE ${DIRECTORY})
+      set(INCLUDES "${INCLUDES} ${MODULE_PATH}/${DIRECTORY}")
+    endif(IS_ABSOLUTE ${DIRECTORY})
+  endforeach(DIRECTORY ${MODULE_INCLUDE_DIRECTORIES})
 
-set(VBO_MODEL_SOURCE
-  Loaders/VBOModel.cpp
-  )
-file(GLOB RENDER_ALGO_SOURCE Algorithms/*.c*)
-add_example(example_algorithms ${RENDER_ALGO_SOURCE} ${VBO_MODEL_SOURCE})
-target_link_libraries(example_algorithms Maoni MaoniMain)
+  file(WRITE ${MODULE_LISTS_FILE} "# ${NAME}\n\n")
+  if(INCLUDES)
+    file(APPEND ${MODULE_LISTS_FILE} "include_directories(${INCLUDES})\n\n")
+  endif(INCLUDES)
 
-##############################################################
-# example with loaders
+  set(SOURCES)
+  foreach(FILE ${MODULE_SOURCE})
+    install(FILES ${MODULE_PATH}/${FILE}
+      DESTINATION share/Maoni/${NAME} COMPONENT examples)
+    file(RELATIVE_PATH FILE ${MODULE_SOURCE_PATH} ${MODULE_PATH}/${FILE})
+    set(SOURCES "${SOURCES}\n  ${FILE}")
+  endforeach(FILE ${MODULE_SOURCE})
 
-set(MESH_LOADER_SOURCE
-  Loaders/VBOModel.cpp
-  Loaders/PLY/ply.cpp Loaders/PLY/plyfile.cpp
-  Loaders/STL/stl.cpp Loaders/STL/stla_io.cpp
-  )
+  file(APPEND ${MODULE_LISTS_FILE}
+    "add_executable(${NAME} EXCLUDE_FROM_ALL ${SOURCES})\n\n"
+    "add_dependencies(examples ${NAME})\n"
+    "target_link_libraries(${NAME} lib_Maoni_shared lib_MaoniMain_static)\n"
+    )
 
-set(LIBRARIES MaoniMain)
+#  "add_executable(${NAME}_IceT EXCLUDE_FROM_ALL ${SOURCES})\n"
+#  "add_dependencies(examples ${NAME}_IceT)\n"
+#  "target_link_libraries(${NAME}_IceT MaoniIceT MaoniMain)\n"
 
-find_package(lib3ds)
-if(lib3ds_LIBRARIES)
-  include_directories(${lib3ds_INCLUDE_DIRS})
-  set(MESH_LOADER_SOURCE ${MESH_LOADER_SOURCE} Loaders/3DS/3ds.cpp)
-  set(LIBRARIES ${LIBRARIES} ${lib3ds_LIBRARIES})
-endif(lib3ds_LIBRARIES)
+  add_subdirectory(${MODULE_SOURCE_PATH} ${MODULE_BINARY_PATH})
+endmacro(MAONI_MODULE NAME)
 
-add_example(example_loaders ${MESH_LOADER_SOURCE})
-target_link_libraries(example_loaders ${LIBRARIES} Maoni)
-
-##############################################################
-# example with both algorithms and loaders
-
-add_example(example_full ${RENDER_ALGO_SOURCE} ${MESH_LOADER_SOURCE})
-target_link_libraries(example_full ${LIBRARIES} Maoni)
-
-##############################################################
-# example with both algorithms and loaders, using Equalizer
-
-add_example(example_eq ${RENDER_ALGO_SOURCE} ${MESH_LOADER_SOURCE})
-target_link_libraries(example_eq ${LIBRARIES} MaoniEq)
-
-##############################################################
-# example with both algorithms and loaders, using IceT
-
-add_example(example_icet ${RENDER_ALGO_SOURCE} ${MESH_LOADER_SOURCE})
-target_link_libraries(example_icet ${LIBRARIES} MaoniIceT)
-
-##############################################################
-
-install(DIRECTORY Algorithms Loaders Models
-  DESTINATION share/libMaoni/examples
-  COMPONENT examples
-  )
-
-##############################################################
-
-file(GLOB MODEL_FILES
-   RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/Models 
-   ${CMAKE_CURRENT_SOURCE_DIR}/Models/?*.*)
-
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Models)
-
-foreach(MODEL_FILE ${MODEL_FILES})
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Models/${MODEL_FILE}
-    ${CMAKE_CURRENT_BINARY_DIR}/Models/${MODEL_FILE} COPYONLY)
-endforeach(MODEL_FILE ${MODEL_FILES})
+# search all subdirectories for examples
+file(GLOB MODULES */Maoni.cmake)
+foreach(MODULE ${MODULES})
+  get_filename_component(MODULE_PATH ${MODULE} PATH)
+  include(${MODULE})
+endforeach(MODULE ${MODULES})

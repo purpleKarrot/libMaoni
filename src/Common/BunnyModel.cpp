@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Bunny.hpp"
+#include "BunnyModel.hpp"
 #include <GL/glew.h>
 #include <Maoni/Vector.hpp>
 #include <boost/array.hpp>

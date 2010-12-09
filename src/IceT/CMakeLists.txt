@@ -1,5 +1,7 @@
 # Copyright (c) 2009, 2010 Daniel Pfeifer, University of Zurich
 
+include(Extract)
+
 find_package(MPI)
 find_package(Boost COMPONENTS mpi)
 
@@ -11,11 +13,8 @@ endif(NOT MPI_FOUND OR NOT Boost_MPI_FOUND)
 include_directories(${MPI_INCLUDE_PATH})
 
 
-set(ICET_FILE ${CMAKE_CURRENT_SOURCE_DIR}/IceT-1-0-0.tar.gz)
 set(ICET_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/IceT-1-0-0)
-file(MAKE_DIRECTORY ${ICET_SOURCE_DIR})
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${ICET_FILE}
-  WORKING_DIRECTORY ${ICET_SOURCE_DIR})
+extract(IceT-1-0-0.tar.gz ${ICET_SOURCE_DIR})
 
 
 set(ICET_INSTALL_NO_DEVELOPMENT ON)
@@ -53,24 +52,17 @@ qt4_wrap_cpp(MAONI_ICET_MOC
   TilesWidget.hpp
   )
 
-add_library(MaoniIceT SHARED
-  ${MAONI_VERSION_RC}
-  ${MAONI_ICET_MOC}
-  FrameData.cpp
-  main.cpp
-  RenderWidget.cpp
-  TilesWidget.cpp
-  )
-
-target_link_libraries(MaoniIceT
-  ${MAONI_LIBRARIES}
-  ${MPI_LIBRARIES}
-  ${Boost_MPI_LIBRARY}
-  ${ICET_LIBRARIES}
-  )
-
-install(TARGETS MaoniIceT
-  ARCHIVE DESTINATION lib COMPONENT devlibs
-  LIBRARY DESTINATION lib COMPONENT devlibs
-  RUNTIME DESTINATION bin COMPONENT runlibs
+purple_library(MaoniIceT SHARED
+  SOURCES
+    ${MAONI_VERSION_RC}
+    ${MAONI_ICET_MOC}
+    FrameData.cpp
+    main.cpp
+    RenderWidget.cpp
+    TilesWidget.cpp
+  DEPENDS
+    ${MAONI_LIBRARIES}
+    ${MPI_LIBRARIES}
+    ${Boost_MPI_LIBRARY}
+    ${ICET_LIBRARIES}
   )
