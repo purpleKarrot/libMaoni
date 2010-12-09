@@ -61,8 +61,13 @@ macro(MAONI_MODULE NAME)
 endmacro(MAONI_MODULE NAME)
 
 # search all subdirectories for examples
-file(GLOB MODULES */Maoni.cmake)
-foreach(MODULE ${MODULES})
+file(GLOB EXAMPLES_SD */Maoni.cmake)
+
+# search workspace for examples
+file(GLOB EXAMPLES_WS ${CMAKE_SOURCE_DIR}/../*/Maoni.cmake)
+
+foreach(MODULE ${EXAMPLES_SD} ${EXAMPLES_WS})
   get_filename_component(MODULE_PATH ${MODULE} PATH)
+  message(STATUS "Maoni module found at: ${MODULE_PATH}")
   include(${MODULE})
-endforeach(MODULE ${MODULES})
+endforeach(MODULE)

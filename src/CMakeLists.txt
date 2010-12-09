@@ -1,5 +1,6 @@
 # Copyright (c) 2009-2010 Daniel Pfeifer, University of Zurich
 
+include(Extract)
 include(PurpleLibrary)
 
 set(QT_USE_QTXML ON)
@@ -14,11 +15,7 @@ endif(WIN32)
 find_package(Boost  REQUIRED COMPONENTS serialization)
 find_package(OpenGL REQUIRED)
 
-
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf
-  ${CMAKE_CURRENT_SOURCE_DIR}/boost-la.tar.gz
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/include)
+extract(boost-la.tar.gz ${CMAKE_BINARY_DIR}/include)
 
 include_directories(
   ${Boost_INCLUDE_DIRS}
