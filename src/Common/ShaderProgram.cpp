@@ -20,6 +20,7 @@
 #include <Maoni/ShaderProgram.hpp>
 #include <iostream>
 #include <string>
+#include <vector>
 
 ShaderProgram::ShaderProgram() :
 	name(0)
@@ -101,6 +102,30 @@ ShaderProgram::operator GLuint() const
 			glGetProgramInfoLog(name, length, 0, &log[0]);
 			std::clog << log << std::endl;
 		}
+
+//		//print uniforms
+//		{
+//			GLint uniforms;
+//			GLint maxlength;
+//
+//			glGetProgramiv(name, GL_ACTIVE_UNIFORMS, &uniforms);
+//			glGetProgramiv(name, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxlength);
+//
+//			std::vector<GLchar> uname(maxlength);
+//
+//			for (GLint i = 0; i < uniforms; ++i)
+//			{
+//				GLsizei length;
+//				GLint size;
+//				GLenum type;
+//
+//				glGetActiveUniform(name, i, uname.size(), &length, &size,
+//						&type, &uname[0]);
+//
+//				std::cout << type << " [" << size << "]: " << &uname[0]
+//						<< std::endl;
+//			}
+//		}
 	}
 
 	return name;
