@@ -18,14 +18,12 @@
 
 #include <QApplication>
 #include <QSplashScreen>
+#include <boost/config.hpp>
 #include "Common/FrameData.hpp"
 #include "Common/MainWindow.hpp"
 #include "Common/RenderWidget.hpp"
 
-#ifdef _MSC_VER
-__declspec(dllexport)
-#endif
-int maoni_main(int argc, char* argv[], //
+BOOST_SYMBOL_EXPORT int maoni_main(int argc, char* argv[],
 		RenderAlgorithm* algorithm_stack, MeshLoader* mesh_loader_stack)
 {
 	QApplication app(argc, argv);

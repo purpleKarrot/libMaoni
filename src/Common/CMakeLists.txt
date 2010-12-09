@@ -14,7 +14,7 @@ configure_file(
 
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/glew-1.5.5/include/GL/glew.h
-  DESTINATION include/Maoni COMPONENT headers
+  DESTINATION include/Maoni COMPONENT dev
   )
 
 include_directories(
@@ -44,7 +44,7 @@ add_library(Common STATIC
   ${COMMON_QRC}
   AlgorithmWidget.cpp
   AnimationWidget.cpp
-  Bunny.cpp
+  BunnyModel.cpp
   FrameData.cpp
   LightWidget.cpp
   Logo.cpp
@@ -52,6 +52,7 @@ add_library(Common STATIC
   Path.cpp
   RenderWidget.cpp
   ShaderProgram.cpp
+  Teaset.c
   Texture.cpp
   )
 

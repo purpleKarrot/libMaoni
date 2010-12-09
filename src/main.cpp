@@ -17,11 +17,9 @@
  */
 
 #include <Maoni.hpp>
+#include <boost/config.hpp>
 
-#ifdef _MSC_VER
-__declspec(dllimport)
-#endif
-int maoni_main(int argc, char* argv[],
+BOOST_SYMBOL_IMPORT int maoni_main(int argc, char* argv[],
 		RenderAlgorithm* algorithm_factory_stack,
 		MeshLoader* mesh_loader_stack);
 

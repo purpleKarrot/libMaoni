@@ -1,18 +1,12 @@
 # Copyright (c) 2010 Daniel Pfeifer, University of Zurich
 
+include(Extract)
+
 # http://get.qt.nokia.com/qt/solutions/lgpl/qtpropertybrowser-2.5_1-opensource.tar.gz
-if(NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/qtpropertymanager.h)
-  execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf
-    ${CMAKE_CURRENT_SOURCE_DIR}/qtpropertybrowser-2.5_1-opensource.tar.gz
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-endif(NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/qtpropertymanager.h)
+extract(qtpropertybrowser-2.5_1-opensource.tar.gz ${CMAKE_CURRENT_BINARY_DIR})
 
 # http://doc.trolltech.com/qq/qq18-propertybrowser-code.zip
-if(NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/filepathmanager.h)
-  execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf
-    ${CMAKE_CURRENT_SOURCE_DIR}/qq18-propertybrowser-extension.tar.gz
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-endif(NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/filepathmanager.h)
+extract(qq18-propertybrowser-extension.tar.gz ${CMAKE_CURRENT_BINARY_DIR})
 
 set(QT_PROPERTY_BROWSER_SRC
   ${CMAKE_CURRENT_BINARY_DIR}/qtbuttonpropertybrowser.cpp
@@ -26,8 +20,10 @@ set(QT_PROPERTY_BROWSER_SRC
   ${CMAKE_CURRENT_BINARY_DIR}/fileedit.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/fileeditfactory.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/filepathmanager.cpp
+  qvector2dpropertymanager.cpp
   qvector3dpropertymanager.cpp
-  )
+  qvector4dpropertymanager.cpp
+)
 
 qt4_wrap_cpp(QT_PROPERTY_BROWSER_MOC
   ${CMAKE_CURRENT_BINARY_DIR}/qtpropertybrowserutils_p.h
@@ -52,8 +48,7 @@ MACRO(ADD_COPY_ONLY file)
   set(input  ${CMAKE_CURRENT_SOURCE_DIR}/${file})
   set(output ${CMAKE_CURRENT_BINARY_DIR}/${file})
   add_custom_command(OUTPUT ${output}
-    COMMAND ${CMAKE_COMMAND}
-    ARGS -E copy ${input} ${output}
+    COMMAND ${CMAKE_COMMAND} -E copy ${input} ${output}
     DEPENDS ${input})
 ENDMACRO(ADD_COPY_ONLY file)
 
@@ -61,13 +56,14 @@ MACRO(QT4_MOC infile outfile)
   set(input  ${CMAKE_CURRENT_BINARY_DIR}/${infile})
   set(output ${CMAKE_CURRENT_BINARY_DIR}/${outfile})
   add_custom_command(OUTPUT ${output}
-    COMMAND ${QT_MOC_EXECUTABLE}
-    ARGS -o ${output} ${input}
+    COMMAND ${QT_MOC_EXECUTABLE} -o ${output} ${input}
     DEPENDS ${input})
   list(APPEND MOC_OUTPUT_LIST ${output})
 ENDMACRO(QT4_MOC)
 
+ADD_COPY_ONLY(qvector2dpropertymanager.h)
 ADD_COPY_ONLY(qvector3dpropertymanager.h)
+ADD_COPY_ONLY(qvector4dpropertymanager.h)
 
 set(MOC_OUTPUT_LIST)
 QT4_MOC(qtbuttonpropertybrowser.h   moc_qtbuttonpropertybrowser.cpp)
@@ -80,7 +76,9 @@ QT4_MOC(qtpropertymanager.cpp       qtpropertymanager.moc)
 QT4_MOC(qttreepropertybrowser.h     moc_qttreepropertybrowser.cpp)
 QT4_MOC(qttreepropertybrowser.cpp   qttreepropertybrowser.moc)
 QT4_MOC(qtvariantproperty.h         moc_qtvariantproperty.cpp)
+QT4_MOC(qvector2dpropertymanager.h  moc_qvector2dpropertymanager.cpp)
 QT4_MOC(qvector3dpropertymanager.h  moc_qvector3dpropertymanager.cpp)
+QT4_MOC(qvector4dpropertymanager.h  moc_qvector4dpropertymanager.cpp)
 
 add_custom_target(QtPropertyBrowser_moc DEPENDS ${MOC_OUTPUT_LIST})
 add_dependencies(QtPropertyBrowser QtPropertyBrowser_moc)
