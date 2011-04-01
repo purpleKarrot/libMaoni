@@ -1,35 +1,50 @@
-# Copyright (c) 2010 Daniel Pfeifer, University of Zurich
+# Copyright (c) 2010-2011 Daniel Pfeifer, University of Zurich
 
-include(Extract)
-extract(libQGLViewer-2.3.6.tar.gz ${CMAKE_CURRENT_BINARY_DIR})
+include(BoostExtract)
+include(BoostDownload)
+include(BoostForwardFile)
+
+boost_download(qglviewer.tgz
+  http://www.libqglviewer.com/src/libQGLViewer-2.3.9.tar.gz
+  a882cb3a8da4ee904a33b46ebb44f905
+  )
+boost_extract(qglviewer.tgz qglviewer)
+
+set(qglviewer_dir "${CMAKE_CURRENT_BINARY_DIR}/qglviewer/QGLViewer")
 
 add_definitions(-DNO_VECTORIAL_RENDER)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 qt4_wrap_ui(QGLVIEWER_UI
-  ${CMAKE_CURRENT_BINARY_DIR}/ImageInterface.ui
+  ${qglviewer_dir}/ImageInterface.Qt4.ui
+  )
+
+boost_forward_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/ui_ImageInterface.h"
+  "${CMAKE_BINARY_DIR}/include/ui_ImageInterface.Qt4.h"
   )
 
 qt4_wrap_cpp(QGLVIEWER_MOC
-  ${CMAKE_CURRENT_BINARY_DIR}/qglviewer.h
-  ${CMAKE_CURRENT_BINARY_DIR}/camera.h
-  ${CMAKE_CURRENT_BINARY_DIR}/manipulatedFrame.h
-  ${CMAKE_CURRENT_BINARY_DIR}/manipulatedCameraFrame.h
-  ${CMAKE_CURRENT_BINARY_DIR}/frame.h
-  ${CMAKE_CURRENT_BINARY_DIR}/keyFrameInterpolator.h
+  ${qglviewer_dir}/camera.h
+  ${qglviewer_dir}/frame.h
+  ${qglviewer_dir}/keyFrameInterpolator.h
+  ${qglviewer_dir}/manipulatedCameraFrame.h
+  ${qglviewer_dir}/manipulatedFrame.h
+  ${qglviewer_dir}/qglviewer.h
   )
 
 add_library(QGLViewer
   ${QGLVIEWER_UI}
   ${QGLVIEWER_MOC}
-  ${CMAKE_CURRENT_BINARY_DIR}/qglviewer.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/camera.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/manipulatedFrame.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/manipulatedCameraFrame.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/frame.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/saveSnapshot.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/constraint.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/keyFrameInterpolator.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/mouseGrabber.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/quaternion.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/vec.cpp
+  ${qglviewer_dir}/camera.cpp
+  ${qglviewer_dir}/constraint.cpp
+  ${qglviewer_dir}/frame.cpp
+  ${qglviewer_dir}/keyFrameInterpolator.cpp
+  ${qglviewer_dir}/manipulatedCameraFrame.cpp
+  ${qglviewer_dir}/manipulatedFrame.cpp
+  ${qglviewer_dir}/mouseGrabber.cpp
+  ${qglviewer_dir}/qglviewer.cpp
+  ${qglviewer_dir}/quaternion.cpp
+  ${qglviewer_dir}/saveSnapshot.cpp
+  ${qglviewer_dir}/vec.cpp
   )

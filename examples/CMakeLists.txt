@@ -1,6 +1,6 @@
 # Copyright (c) 2009 Daniel Pfeifer, University of Zurich
 
-include(ParseArguments)
+include(CMakeParseArguments)
 
 find_package(Boost REQUIRED)
 include_directories(
@@ -16,7 +16,7 @@ macro(MAONI_MODULE NAME)
   set(MODULE_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR}/${NAME}_binary)
   set(MODULE_LISTS_FILE ${MODULE_SOURCE_PATH}/CMakeLists.txt)
 
-  parse_arguments(MODULE "INCLUDE_DIRECTORIES;SOURCE;DATA" "" ${ARGN})
+  cmake_parse_arguments(MODULE "" "" "INCLUDE_DIRECTORIES;SOURCE;DATA" ${ARGN})
 
   foreach(FILE ${MODULE_DATA})
     file(COPY ${MODULE_PATH}/${FILE}
@@ -50,7 +50,7 @@ macro(MAONI_MODULE NAME)
   file(APPEND ${MODULE_LISTS_FILE}
     "add_executable(${NAME} EXCLUDE_FROM_ALL ${SOURCES})\n\n"
     "add_dependencies(examples ${NAME})\n"
-    "target_link_libraries(${NAME} lib_Maoni_shared lib_MaoniMain_static)\n"
+    "target_link_libraries(${NAME} Maoni MaoniMain)\n"
     )
 
 #  "add_executable(${NAME}_IceT EXCLUDE_FROM_ALL ${SOURCES})\n"

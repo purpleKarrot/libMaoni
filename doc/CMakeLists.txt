@@ -1,5 +1,14 @@
+##
+# Copyright (c) 2009 Daniel Pfeifer, University of Zurich
+##
 
-add_reference(maoni-ref.xml
+find_package(Boost REQUIRED COMPONENTS boostbook quickbook NO_MODULE)
+include("${Boost_USE_FILE}")
+
+include(BoostAddReference)
+include(AddDocumentation)
+
+boost_add_reference(maoni-ref
   ../include/Maoni/Color.hpp
   ../include/Maoni/Enum.hpp
   ../include/Maoni/MeshLoader.hpp
@@ -10,7 +19,8 @@ add_reference(maoni-ref.xml
   ../include/Maoni/Texture.hpp
   ../include/Maoni/Vector.hpp
   ../include/Maoni/Vertex.hpp
-  HEADER_PREFIX Maoni
+  XSLTPROC_PARAMETERS
+    boost.doxygen.header.prefix=Maoni
   )
 
 add_documentation(libMaoni.qbk
