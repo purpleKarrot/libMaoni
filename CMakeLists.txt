@@ -26,17 +26,9 @@ install(FILES include/Maoni.hpp DESTINATION include COMPONENT dev)
 option(MAONI_SKIP_EQUALIZER "Do not build libMaoniEq" OFF)
 option(MAONI_SKIP_ICET "Do not build libMaoniIceT" OFF)
 
+add_subdirectory(doc)
 add_subdirectory(src)
 add_subdirectory(examples)
-
-
-# Building of Documentation is tested on Linux only
-if(CMAKE_SYSTEM_NAME STREQUAL Linux)
-  set(THIS_PROJECT_NAME libMaoni)
-  include(AddReference)
-  include(AddDocumentation)
-  add_subdirectory(doc EXCLUDE_FROM_ALL)
-endif(CMAKE_SYSTEM_NAME STREQUAL Linux)
 
 SET(CPACK_SOURCE_IGNORE_FILES "/[.][^/]*;${CMAKE_BINARY_DIR}/")
 
