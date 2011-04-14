@@ -23,8 +23,8 @@ include_directories(BEFORE SYSTEM include)
 install(DIRECTORY include/Maoni DESTINATION include COMPONENT dev)
 install(FILES include/Maoni.hpp DESTINATION include COMPONENT dev)
 
-option(MAONI_SKIP_EQUALIZER "Do not build libMaoniEq" OFF)
-option(MAONI_SKIP_ICET "Do not build libMaoniIceT" OFF)
+option(MAONI_SKIP_EQUALIZER "Do not build libMaoniEq" ON)
+option(MAONI_SKIP_ICET "Do not build libMaoniIceT" ON)
 
 add_subdirectory(doc)
 add_subdirectory(src)

@@ -15,24 +15,31 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf
   ${CMAKE_CURRENT_SOURCE_DIR}/boost-la.tar.gz
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/include)
 
+
+find_package(QGLViewer)
+if(QGLVIEWER_FOUND)
+  include_directories(${QGLVIEWER_INCLUDE_DIR})
+  add_library(QGLViewer SHARED IMPORTED)
+  set_target_properties(QGLViewer PROPERTIES
+    IMPORTED_LOCATION "${QGLVIEWER_LIBRARY}"
+    )
+else(QGLVIEWER_FOUND)
+  include_directories(${CMAKE_CURRENT_BINARY_DIR}/QGLViewer/qglviewer/QGLViewer)
+  add_definitions(-DQGLVIEWER_STATIC)
+  add_subdirectory(QGLViewer)
+endif(QGLVIEWER_FOUND)
+
+
 include_directories(
   ${OPENGL_INCLUDE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_BINARY_DIR}/include
-  ${CMAKE_CURRENT_BINARY_DIR}/QGLViewer/qglviewer/QGLViewer
   ${CMAKE_CURRENT_BINARY_DIR}/QPropertyBrowser
   ${CMAKE_CURRENT_BINARY_DIR}/QPropertyBrowser/browser
   ${CMAKE_CURRENT_BINARY_DIR}/QPropertyBrowser/browser-ext
   )
 
-add_definitions(
-  -DBOOST_ALL_NO_LIB
-  -DQGLVIEWER_STATIC
-  )
-
-
 add_subdirectory(Common)
-add_subdirectory(QGLViewer)
 add_subdirectory(QPropertyBrowser)
 
 set(MAONI_LIBRARIES
