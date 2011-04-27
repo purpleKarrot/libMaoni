@@ -8,7 +8,15 @@ include(CMakeParseArguments)
 function(add_documentation input)
   cmake_parse_arguments(DOC "" "" "IMAGES" ${ARGN})
 
+  file(COPY
+      "${Boost_RESOURCE_PATH}/images"
+      "${Boost_RESOURCE_PATH}/boost.css"
+    DESTINATION
+      "${CMAKE_CURRENT_BINARY_DIR}/html/"
+    )
+
   # copy images into different locations... quick and dirty...
+  file(COPY ${DOC_IMAGES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/html)
   file(COPY ${DOC_IMAGES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/images)
   file(COPY ${DOC_IMAGES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/html/images)
 

@@ -1,12 +1,9 @@
 # Copyright (c) 2009 Daniel Pfeifer, University of Zurich
 
-include(CMakeParseArguments)
+find_package(Boost NO_MODULE)
+include("${Boost_USE_FILE}")
 
-find_package(Boost REQUIRED)
-include_directories(
-  ${Boost_INCLUDE_DIRS}
-  ${CMAKE_BINARY_DIR}/include
-  )
+include_directories(${CMAKE_BINARY_DIR}/include)
 
 add_custom_target(examples)
 

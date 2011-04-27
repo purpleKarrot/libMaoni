@@ -56,10 +56,23 @@ endif(MSVC)
 
 
 #add_subdirectory(Equalizer)
-add_subdirectory(IceT)
+#add_subdirectory(IceT)
+
 
 add_library(Maoni SHARED Maoni.cpp ${MAONI_VERSION_RC})
 target_link_libraries(Maoni ${MAONI_LIBRARIES})
 boost_link_libraries(Maoni serialization)
 
 add_library(MaoniMain STATIC main.cpp)
+
+
+install(TARGETS Maoni MaoniMain EXPORT Maoni
+  ARCHIVE DESTINATION lib COMPONENT dev
+  LIBRARY DESTINATION lib COMPONENT dev
+  RUNTIME DESTINATION bin
+  )
+
+# install(EXPORT Maoni
+#   DESTINATION share/Maoni
+#   COMPONENT dev
+#   )

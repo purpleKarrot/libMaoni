@@ -17,7 +17,6 @@ endif(NOT WIN32)
 
 
 list(APPEND CMAKE_MODULE_PATH ${Maoni_SOURCE_DIR}/CMake)
-include(DailyVersion)
 
 include_directories(BEFORE SYSTEM include)
 install(DIRECTORY include/Maoni DESTINATION include COMPONENT dev)
@@ -29,8 +28,6 @@ option(MAONI_SKIP_ICET "Do not build libMaoniIceT" ON)
 add_subdirectory(doc)
 add_subdirectory(src)
 add_subdirectory(examples)
-
-SET(CPACK_SOURCE_IGNORE_FILES "/[.][^/]*;${CMAKE_BINARY_DIR}/")
 
 set(CPACK_PACKAGE_NAME "libMaoni")
 set(CPACK_PACKAGE_VENDOR "http://github.com/purpleKarrot/libMaoni")
@@ -44,7 +41,7 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY "Maoni")
 
 set(CPACK_RESOURCE_FILE_LICENSE ${Maoni_SOURCE_DIR}/COPYING)
 
-set(CPACK_COMPONENTS_ALL dev examples)
+set(CPACK_COMPONENTS_ALL dev doc)
 
 set(CPACK_COMPONENT_DEV_DISPLAY_NAME "Headers and Libraries")
 set(CPACK_COMPONENT_DEV_DESCRIPTION
@@ -57,16 +54,14 @@ set(CPACK_COMPONENT_EXAMPLES_DESCRIPTION
 set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/src/Icons/stanford-bunny.ico")
 
 set(CPACK_DEBIAN_BUILD_DEPENDS
-  libqt4-dev
-  libqt4-opengl-dev
-  libboost-all-dev
+  boost-cmake
+  libboost-compatibility-dev
+  libboost-serialization-dev
+  libboost-iostreams-dev
+  libqglviewer-qt4-dev
   libglew1.5-dev
-  equalizer
-  doxygen
-  xsltproc
   )
 
-set(DPUT_HOST "ppa:purplekarrot/ppa")
 
 include(CPack)
 include(UploadPPA)

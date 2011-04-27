@@ -1,13 +1,4 @@
 
-find_program(DEBUILD_EXECUTABLE debuild)
-find_program(DPUT_EXECUTABLE dput)
-
-if(NOT DEBUILD_EXECUTABLE OR NOT DPUT_EXECUTABLE)
-  return()
-endif(NOT DEBUILD_EXECUTABLE OR NOT DPUT_EXECUTABLE)
-
-set(CPACK_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION}-6)
-
 # DEBIAN/control
 # debian policy enforce lower case for package name
 # Package: (mandatory)
@@ -98,7 +89,7 @@ file(WRITE ${DEBIAN_RULES}
   "build:\n"
   "	mkdir $(BUILDDIR)\n"
   "	cd $(BUILDDIR); cmake ..\n"
-  "	make -C $(BUILDDIR) preinstall\n"
+  "	make --no-print-directory -C $(BUILDDIR) preinstall\n"
   "	touch build\n"
   "\n"
   "binary: binary-indep binary-arch\n"
@@ -107,7 +98,7 @@ file(WRITE ${DEBIAN_RULES}
   "\n"
   "binary-arch: build\n"
   "	cd $(BUILDDIR); cmake -DCOMPONENT=Unspecified -DCMAKE_INSTALL_PREFIX=../debian/tmp/usr -P cmake_install.cmake\n"
-  "	mkdir debian/tmp/DEBIAN\n"
+  "	cmake -E make_directory debian/tmp/DEBIAN\n"
   "	dpkg-gencontrol -p${CPACK_DEBIAN_PACKAGE_NAME}\n"
   "	dpkg --build debian/tmp ..\n"
   )
@@ -117,7 +108,7 @@ foreach(COMPONENT ${CPACK_COMPONENTS_ALL})
   set(PACKAGE ${CPACK_DEBIAN_PACKAGE_NAME}-${COMPONENT})
   file(APPEND ${DEBIAN_RULES}
     "	cd $(BUILDDIR); cmake -DCOMPONENT=${COMPONENT} -DCMAKE_INSTALL_PREFIX=../${PATH}/usr -P cmake_install.cmake\n"
-    "	mkdir ${PATH}/DEBIAN\n"
+      "	cmake -E make_directory ${PATH}/DEBIAN\n"
     "	dpkg-gencontrol -p${PACKAGE} -P${PATH}\n"
     "	dpkg --build ${PATH} ..\n"
     )
@@ -145,27 +136,35 @@ file(WRITE ${DEBIAN_SOURCE_DIR}/debian/source/format "3.0 (native)")
 ##############################################################################
 # debian/changelog
 set(DEBIAN_CHANGELOG ${DEBIAN_SOURCE_DIR}/debian/changelog)
-execute_process(COMMAND date -R  OUTPUT_VARIABLE DATE_TIME)
+execute_process(COMMAND date -R OUTPUT_VARIABLE DATE_TIME)
+execute_process(COMMAND date +%y%m%d-6 OUTPUT_VARIABLE suffix OUTPUT_STRIP_TRAILING_WHITESPACE)
 file(WRITE ${DEBIAN_CHANGELOG}
-  "${CPACK_DEBIAN_PACKAGE_NAME} (${CPACK_PACKAGE_VERSION}) maverick; urgency=low\n\n"
+  "${CPACK_DEBIAN_PACKAGE_NAME} (0.8.15-${suffix}) natty; urgency=low\n\n"
   "  * Package built with CMake\n\n"
   " -- ${CPACK_PACKAGE_CONTACT}  ${DATE_TIME}"
   )
 
 ##############################################################################
-# debuild -S
-set(DEB_SOURCE_CHANGES
-  ${CPACK_DEBIAN_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_source.changes
+# upload package to PPA
+
+find_program(DPKG_BUILDPACKAGE dpkg-buildpackage)
+find_program(DPUT dput)
+
+if(NOT DPKG_BUILDPACKAGE OR NOT DPUT)
+  return()
+endif()
+
+set(changes_file
+  "${CPACK_DEBIAN_PACKAGE_NAME}_0.8.15-${suffix}_source.changes"
   )
 
-add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/Debian/${DEB_SOURCE_CHANGES}
-  COMMAND ${DEBUILD_EXECUTABLE} -S
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${changes_file}
+  COMMAND ${DPKG_BUILDPACKAGE} -S
   WORKING_DIRECTORY ${DEBIAN_SOURCE_DIR}
   )
 
-##############################################################################
-# dput ppa:your-lp-id/ppa <source.changes>
-add_custom_target(dput ${DPUT_EXECUTABLE} ${DPUT_HOST} ${DEB_SOURCE_CHANGES}
-  DEPENDS ${CMAKE_BINARY_DIR}/Debian/${DEB_SOURCE_CHANGES}
+add_custom_target(deploy
+  ${DPUT} "ppa:purplekarrot/ppa" ${changes_file}
+  DEPENDS ${CMAKE_BINARY_DIR}/${changes_file}
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/Debian
   )
