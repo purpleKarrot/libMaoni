@@ -21,6 +21,7 @@
 #include "AlgorithmWidget.hpp"
 #include "../Common/FrameData.hpp"
 #include <Maoni/detail/Enum.hpp>
+#include <Maoni/Color.hpp>
 #include <Maoni/Path.hpp>
 #include <qteditorfactory.h>
 #include <fileeditfactory.h>

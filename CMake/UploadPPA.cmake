@@ -137,7 +137,7 @@ file(WRITE ${DEBIAN_SOURCE_DIR}/debian/source/format "3.0 (native)")
 # debian/changelog
 set(DEBIAN_CHANGELOG ${DEBIAN_SOURCE_DIR}/debian/changelog)
 execute_process(COMMAND date -R OUTPUT_VARIABLE DATE_TIME)
-execute_process(COMMAND date +%y%m%d-6 OUTPUT_VARIABLE suffix OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND date +%y%m%d OUTPUT_VARIABLE suffix OUTPUT_STRIP_TRAILING_WHITESPACE)
 file(WRITE ${DEBIAN_CHANGELOG}
   "${CPACK_DEBIAN_PACKAGE_NAME} (0.8.15-${suffix}) natty; urgency=low\n\n"
   "  * Package built with CMake\n\n"

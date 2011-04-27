@@ -1,8 +1,6 @@
 #include "MainWindow.hpp"
 #include "RenderWidget.hpp"
-#include "LightWidget.hpp"
 #include "AlgorithmWidget.hpp"
-#include "AnimationWidget.hpp"
 #include "TextOutput.hpp"
 #include "../Common/FrameData.hpp"
 
@@ -80,20 +78,6 @@ MainWindow::MainWindow(FrameData& framedata, RenderWidget* render_widget) :
 			set_foreground_color()));
 	visual_hints->addAction(foreground_color);
 
-	visual_hints->addSeparator();
-
-	QAction* logo_path = new QAction("&set logo path", this);
-	connect(logo_path, SIGNAL(triggered()), render_widget,
-			SLOT(set_logo_path()));
-	visual_hints->addAction(logo_path);
-
-	QAction* logo = new QAction("&render logo", this);
-	logo->setCheckable(true);
-	connect(logo, SIGNAL(triggered(bool)), render_widget, SLOT(
-					set_logo(bool)));
-	logo->setChecked(render_widget->logo_is_enabled());
-	visual_hints->addAction(logo);
-
 	dock_menu = menuBar()->addMenu("&Window");
 	init_docks();
 
@@ -133,10 +117,6 @@ void MainWindow::add_dock(const char* name, Qt::DockWidgetArea area,
 
 void MainWindow::init_docks()
 {
-	light_widget = new LightWidget(framedata);
-	connect(this, SIGNAL(data_updated()), light_widget, SLOT(update_browser()));
-	add_dock("LightWidget", Qt::LeftDockWidgetArea, light_widget);
-
 	if (framedata.num_algorithms() > 0)
 	{
 		algo_widget = new AlgorithmWidget(framedata);
@@ -144,9 +124,6 @@ void MainWindow::init_docks()
 				update_browser()));
 		add_dock("AlgorithmWidget", Qt::RightDockWidgetArea, algo_widget);
 	}
-
-	AnimationWidget* animation_widget = new AnimationWidget(render_widget);
-	add_dock("AnimationWidget", Qt::LeftDockWidgetArea, animation_widget, false);
 
 	add_dock("Output", Qt::BottomDockWidgetArea, new TextOutput);
 }
@@ -240,8 +217,8 @@ void MainWindow::import_scene()
 	{
 		framedata.import_scene(filename.toStdString().c_str());
 		algo_widget->reload();
-		light_widget->reload();
-	} catch (std::exception&e)
+	}
+	catch (std::exception& e)
 	{
 		QMessageBox::warning(this, "Error", e.what());
 	}

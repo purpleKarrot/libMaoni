@@ -27,8 +27,6 @@ add_definitions(
 
 qt4_wrap_cpp(COMMON_MOC
   AlgorithmWidget.hpp
-  AnimationWidget.hpp
-  LightWidget.hpp
   MainWindow.hpp
   RenderWidget.hpp
   TextOutput.hpp
@@ -43,16 +41,12 @@ add_library(Common STATIC
   ${COMMON_MOC}
   ${COMMON_QRC}
   AlgorithmWidget.cpp
-  AnimationWidget.cpp
-  BunnyModel.cpp
+  Gears.cpp
   FrameData.cpp
-  LightWidget.cpp
-  Logo.cpp
   MainWindow.cpp
   Path.cpp
   RenderWidget.cpp
   ShaderProgram.cpp
-  Teaset.c
   Texture.cpp
   )
 

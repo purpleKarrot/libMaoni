@@ -29,18 +29,19 @@ BOOST_SYMBOL_EXPORT int maoni_main(int argc, char* argv[],
 	QApplication app(argc, argv);
 	Q_INIT_RESOURCE(Resources);
 
-	QPixmap pixmap(":/Maoni/Splashscreen.jpg");
-	QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
-	splash.show();
-	splash.showMessage("Loading Widgets...");
+//	QPixmap pixmap(":/Maoni/Splashscreen.jpg");
+//	QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
+//	splash.show();
+//	splash.showMessage("Loading Widgets...");
 
 	FrameData framedata(algorithm_stack, mesh_loader_stack);
 
 	MainWindow main_window(framedata, new RenderWidget(framedata));
 	main_window.setWindowTitle("Maoni");
+	main_window.show();
 
-	QTimer::singleShot(1000, &main_window, SLOT(show()));
-	QTimer::singleShot(1337, &splash, SLOT(close()));
+//	QTimer::singleShot(1000, &main_window, SLOT(show()));
+//	QTimer::singleShot(1337, &splash, SLOT(close()));
 
 	return app.exec();
 }

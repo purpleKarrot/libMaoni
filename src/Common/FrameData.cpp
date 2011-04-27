@@ -20,7 +20,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/serialization/vector.hpp>
 #include "serialize.hpp"
-#include "BunnyModel.hpp"
+#include "Gears.hpp"
 #include <fstream>
 
 FrameData::FrameData(RenderAlgorithm* algorithm_stack,
@@ -40,17 +40,7 @@ FrameData::FrameData(FrameData const& other) :
 
 void FrameData::init()
 {
-	lights.resize(16); // alternative: query this constant using glGet and GL_MAX_LIGHTS
-	std::memset(&lights[0], 0, lights.size() * sizeof(Light));
-
-	//! light 0 defaults
-	lights[0].enabled = true;
-	lights[0].ambient = Color(0.0, 0.0, 0.0, 1.0);
-	lights[0].position = Vec3(1.0, 1.0, 0.0);
-	lights[0].diffuse = Color(1.0, 1.0, 1.0, 1.0);
-	lights[0].specular = Color(1.0, 1.0, 1.0, 1.0);
-
-	model_.reset(new Bunny);
+	model_.reset(new Gears);
 }
 
 void FrameData::load_model(std::string const& filename)
@@ -63,7 +53,7 @@ void FrameData::load_model(std::string const& filename)
 
 	//! make sure we have a valid model even if the loader failed
 	if (!model_)
-		model_.reset(new Bunny);
+		model_.reset(new Gears);
 
 	model_name = filename;
 }
@@ -135,24 +125,13 @@ void FrameData::draw() const
 		model_->draw();
 }
 
-void FrameData::drawLogo() const
-{
-	logo.draw();
-}
-
 void FrameData::do_export_scene(boost::archive::xml_oarchive& archive)
 {
-	archive << boost::serialization::make_nvp("lights", lights);
 	archive << boost::serialization::make_nvp("model", model_name);
 	archive << boost::serialization::make_nvp("ralgo_name", ralgo_name);
 
 	if (renderer)
 		archive << boost::serialization::make_nvp("renderer", *renderer);
-
-	logo_path = logo.get_path();
-	archive << boost::serialization::make_nvp("logo_path", logo_path);
-	logo_render = logo.get_render();
-	archive << boost::serialization::make_nvp("logo_render", logo_render);
 }
 
 void FrameData::export_scene(const char* filename)
@@ -168,8 +147,6 @@ void FrameData::export_scene(const char* filename)
 
 void FrameData::do_import_scene(boost::archive::xml_iarchive& archive)
 {
-	archive >> boost::serialization::make_nvp("lights", lights);
-
 	archive >> boost::serialization::make_nvp("model", model_name);
 	load_model(model_name);
 
@@ -177,12 +154,6 @@ void FrameData::do_import_scene(boost::archive::xml_iarchive& archive)
 	set_render_algorithm(ralgo_name);
 
 	archive >> boost::serialization::make_nvp("algorithm", *renderer);
-
-	archive >> boost::serialization::make_nvp("logo_path", logo_path);
-	logo.set_path(logo_path);
-
-	archive >> boost::serialization::make_nvp("logo_render", logo_render);
-	logo.set_render(logo_render);
 }
 
 void FrameData::import_scene(const char* filename)

@@ -7,8 +7,8 @@ include_directories(${CMAKE_BINARY_DIR}/include)
 
 add_custom_target(examples)
 
-foreach(name Enum SphereMapping Triangle)
-  add_executable(${name} EXCLUDE_FROM_ALL ${name}.cpp)
+foreach(name Empty SphereMapping Triangle)
+  add_executable(${name} EXCLUDE_FROM_ALL ${name})
   add_dependencies(examples ${name})
   target_link_libraries(${name} Maoni MaoniMain)
 

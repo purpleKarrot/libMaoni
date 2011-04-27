@@ -1,6 +1,6 @@
 /*
  * libMaoni common viewing framework
- * Copyright (C) 2009, 2010 Daniel Pfeifer
+ * Copyright (C) 2009 - 2011 Daniel Pfeifer
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,50 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOGO_HPP_
-#define LOGO_HPP_
+#ifndef MAONI_GEARS_HPP
+#define MAONI_GEARS_HPP
 
-#include <string>
-#include <Maoni/Texture.hpp>
+#include <Maoni/Model.hpp>
 
-class Logo
+struct Gears: Model
 {
-public:
-	Logo() :
-		texture(":/Maoni/libmaoni_logo.png"), render(false)
-	{
-	}
-
-	void set_path(const std::string path)
-	{
-		texture.path(path);
-		calc_pos(window_width, window_height);
-	}
-
-	std::string get_path() const
-	{
-		return texture.path();
-	}
-
-	void set_render(bool render)
-	{
-		this->render = render;
-	}
-
-	bool get_render() const
-	{
-		return render;
-	}
-
 	void draw() const;
-
-	void calc_pos(int window_width, int window_height);
-
-private:
-	bool render;
-	Texture texture;
-	int pos_x1, pos_x2, pos_y1, pos_y2;
-	int window_width, window_height;
 };
 
-#endif /* LOGO_HPP_ */
+#endif /* MAONI_GEARS_HPP */

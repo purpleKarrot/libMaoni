@@ -19,11 +19,9 @@
 #ifndef FRAME_DATA_HPP
 #define FRAME_DATA_HPP
 
-#include "Light.hpp"
 #include <Maoni/Model.hpp>
 #include <Maoni/RenderAlgorithm.hpp>
 #include <Maoni/MeshLoader.hpp>
-#include "../Common/Logo.hpp"
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <string>
@@ -63,44 +61,10 @@ public:
 	//! get the amount of mesh loaders
 	std::size_t num_loaders() const;
 
-	//! get the amount of lights
-	std::size_t num_lights() const
-	{
-		return lights.size();
-	}
-
-	virtual Light& light(std::size_t i)
-	{
-		return lights[i];
-	}
-
-	virtual const Light& light(std::size_t i) const
-	{
-		return lights[i];
-	}
-
 	void draw() const;
-
-	void drawLogo() const;
-
-	void enable_logo(bool render)
-	{
-		logo.set_render(render);
-	}
-
-	bool logo_is_enabled() const
-	{
-		return logo.get_render();
-	}
-
-	void set_logo_path(std::string path)
-	{
-		logo.set_path(path);
-	}
 
 	virtual void resize(int width, int height)
 	{
-		logo.calc_pos(width, height);
 	}
 
 	virtual void setRenderParamChanged()
@@ -144,14 +108,8 @@ protected:
 	virtual void do_export_scene(boost::archive::xml_oarchive& archive);
 
 protected:
-	std::vector<Light> lights;
-
 	std::string model_name;
 	std::string ralgo_name;
-	std::string logo_path;
-	bool logo_render;
-
-	Logo logo;
 
 	RenderAlgorithm* renderer;
 
