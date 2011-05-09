@@ -44,16 +44,13 @@ void readVertices(PlyFile* file, std::size_t nVertices, GLuint buffer)
 		{ (char*) "blue", Uint8, Uint8, offsetof(Vertex, b), 0, 0, 0, 0 }
 	};
 
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 6; ++i)
 		setup_property_ply(file, &vertexProps[i]);
 
 	std::vector<Vertex> vertices(nVertices);
 
 	for (std::vector<Vertex>::iterator v = vertices.begin(); v != vertices.end(); ++v)
 		get_element_ply(file, static_cast<void*> (&*v));
-
-	for (std::vector<Vertex>::iterator v = vertices.begin(); v != vertices.end(); ++v)
-		std::cout << v->x << " " << v->y << " " << v->z << std::endl;
 
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
@@ -162,7 +159,7 @@ void ModelPLY::draw(int myrank, int ranks) const
 //	glEnableClientState(GL_COLOR_ARRAY);
 //	glColorPointer(3, GL_UNSIGNED_BYTE, sizeof(Vertex), (const GLvoid*) offsetof(Vertex, r));
 
-	glDrawRangeElements(GL_TRIANGLES, 0, faces - 1, faces, GL_UNSIGNED_INT, 0);
+	glDrawRangeElements(GL_TRIANGLES, 0, faces*3 -1, faces*3, GL_UNSIGNED_INT, 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 //	glDisableClientState(GL_NORMAL_ARRAY);

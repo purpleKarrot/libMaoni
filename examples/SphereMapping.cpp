@@ -35,7 +35,7 @@ SHADER_PROGRAM(SphereMappingShader,
 RENDER_ALGORITHM(SphereMapping,
 		(ShaderProgram, shader, SphereMappingShader())
 		(Texture, sphere_texture, "../examples/Models/sphere3.jpg")
-		(ModelPLY, model, "rockerArm.ply")
+		(ModelPLY, model, "bunny.ply")
 )
 {
 //	ScopedDisable lighting_lock(GL_LIGHTING);
