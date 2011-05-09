@@ -24,15 +24,6 @@ MainWindow::MainWindow(FrameData& framedata, RenderWidget* render_widget) :
 	QAction* action;
 	QMenu* file = menuBar()->addMenu("&File");
 
-	//! this entry is shown iff there is at least one loader available
-	if (framedata.num_loaders() > 0)
-	{
-		action = new QAction("Load &Model...", this);
-		connect(action, SIGNAL(triggered()), this, SLOT(load_model()));
-		file->addAction(action);
-		file->addSeparator();
-	}
-
 	action = new QAction("&Import Scene", this);
 	connect(action, SIGNAL(triggered()), this, SLOT(import_scene()));
 	file->addAction(action);
@@ -141,50 +132,6 @@ void MainWindow::about_maoni()
 			"A versatile 3D viewer based on OpenGL and Qt.<br>"
 				"Copyright 2009-2010 Stefan Hutter, Daniel Pfeifer.<br>"
 				"<a href=\"http://github.com/purpleKarrot/libMaoni\">http://github.com/purpleKarrot/libMaoni</a>");
-}
-
-class append_filter
-{
-public:
-	append_filter(QString& filter) :
-		filter(filter)
-	{
-		filter = "All files (*.*)";
-	}
-
-	void operator()(MeshLoader* loader)
-	{
-		filter += QString(";;%1 (*.%2)").arg(loader->name()).arg(
-				loader->extension());
-	}
-
-private:
-	QString& filter;
-};
-
-void MainWindow::load_model()
-{
-	QString filter;
-	framedata.for_each_loader(append_filter(filter));
-	QString filename = QFileDialog::getOpenFileName(this,
-			"Choose the model file to load", "Models/trico.ply", filter);
-
-	if (filename.isNull())
-		return;
-
-	try
-	{
-		framedata.load_model(filename.toStdString().c_str());
-	} catch (std::exception& e)
-	{
-		QMessageBox::warning(this, "Error", //
-				"Exception caught while loading \"" + filename + "\":\n"
-						+ e.what());
-	} catch (...)
-	{
-		QMessageBox::warning(this, "Error", //
-				"Unknown exception caught while loading \"" + filename + "\".");
-	}
 }
 
 void MainWindow::set_background_color()

@@ -22,7 +22,6 @@
 #define MAONI_RENDER_ALGORITHM_HPP
 
 #include <Maoni/detail/Extensible.hpp>
-#include <Maoni/Model.hpp>
 #include <Maoni/Vector.hpp>
 
 class Enum;
@@ -145,7 +144,7 @@ struct RenderAlgorithm: Extensible<RenderAlgorithm>
       \param model A const reference to the model to be drawn by
       the render algorithm
     */
-	virtual void render(const Model& model) const = 0;
+	virtual void render(int myrank, int ranks) const = 0;
 
 	/** Signature of a method which maps the render algorithm's parameter
 	 *  list to a GUI using the property methods of the AlgorithmConfig interface

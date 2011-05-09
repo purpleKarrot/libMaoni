@@ -20,42 +20,24 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/serialization/vector.hpp>
 #include "serialize.hpp"
-#include "Gears.hpp"
 #include <fstream>
 
-FrameData::FrameData(RenderAlgorithm* algorithm_stack,
-		MeshLoader* mesh_loader_stack) :
-	renderer(0), algorithm_stack(algorithm_stack), mesh_loader_stack(
-			mesh_loader_stack)
+extern "C" void draw_gears();
+
+FrameData::FrameData(RenderAlgorithm* algorithm_stack) :
+	renderer(0), algorithm_stack(algorithm_stack)
 {
 	init();
 }
 
 FrameData::FrameData(FrameData const& other) :
-	renderer(0), algorithm_stack(other.algorithm_stack), //
-			mesh_loader_stack(other.mesh_loader_stack)
+	renderer(0), algorithm_stack(other.algorithm_stack)
 {
 	init();
 }
 
 void FrameData::init()
 {
-	model_.reset(new Gears);
-}
-
-void FrameData::load_model(std::string const& filename)
-{
-	for (MeshLoader* i = mesh_loader_stack; i; i = i->next)
-	{
-		if (boost::algorithm::iends_with(filename, i->extension()))
-			i->load(model_, filename.c_str(), myrank(), ranks());
-	}
-
-	//! make sure we have a valid model even if the loader failed
-	if (!model_)
-		model_.reset(new Gears);
-
-	model_name = filename;
 }
 
 class algo_setter
@@ -108,21 +90,12 @@ std::size_t FrameData::num_algorithms() const
 	return num;
 }
 
-std::size_t FrameData::num_loaders() const
-{
-	std::size_t num = 0;
-	for_each_loader(count(num));
-	return num;
-}
-
 void FrameData::draw() const
 {
-	assert(model_);
-
 	if (renderer)
-		renderer->render(*model_);
+		renderer->render(this->myrank(), this->ranks());
 	else
-		model_->draw();
+		draw_gears();
 }
 
 void FrameData::do_export_scene(boost::archive::xml_oarchive& archive)
@@ -147,9 +120,6 @@ void FrameData::export_scene(const char* filename)
 
 void FrameData::do_import_scene(boost::archive::xml_iarchive& archive)
 {
-	archive >> boost::serialization::make_nvp("model", model_name);
-	load_model(model_name);
-
 	archive >> boost::serialization::make_nvp("renderer", ralgo_name);
 	set_render_algorithm(ralgo_name);
 

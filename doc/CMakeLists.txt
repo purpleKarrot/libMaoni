@@ -18,7 +18,6 @@ boost_add_reference(maoni-ref
   ../include/Maoni/ShaderProgram.hpp
   ../include/Maoni/Texture.hpp
   ../include/Maoni/Vector.hpp
-  ../include/Maoni/Vertex.hpp
   XSLTPROC_PARAMETERS
     boost.doxygen.header.prefix=Maoni
   )

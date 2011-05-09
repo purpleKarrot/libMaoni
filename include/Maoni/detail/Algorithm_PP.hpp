@@ -42,7 +42,7 @@
                                                                                \
 		const char* name() const { return #NAME; }                             \
                                                                                \
-        void render(const Model& model) const;                                 \
+        void render(int myrank, int ranks) const;                              \
                                                                                \
 		void config(AlgorithmConfig& manager)                                  \
 		{                                                                      \
@@ -56,7 +56,7 @@
 	};                                                                         \
                                                                                \
 	NAME NAME::instance;                                                       \
-	void NAME::render(const Model& model) const                                \
+	void NAME::render(int myrank, int ranks) const                             \
 
 #define COLON() :
 

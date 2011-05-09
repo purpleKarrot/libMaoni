@@ -4,9 +4,7 @@
 #include <qglviewer.h>
 #include <boost/noncopyable.hpp>
 
-#include <Maoni/Model.hpp>
 #include <Maoni/RenderAlgorithm.hpp>
-#include <Maoni/detail/MeshLoader.hpp>
 
 class FrameData;
 

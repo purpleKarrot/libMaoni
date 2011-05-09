@@ -3,6 +3,7 @@
  */
 
 #include <Maoni.hpp>
+#include "ModelPLY.hpp"
 
 SHADER_SOURCE(vertex_source, (version 120),
 
@@ -34,14 +35,15 @@ SHADER_PROGRAM(SphereMappingShader,
 RENDER_ALGORITHM(SphereMapping,
 		(ShaderProgram, shader, SphereMappingShader())
 		(Texture, sphere_texture, "../examples/Models/sphere3.jpg")
+		(ModelPLY, model, "rockerArm.ply")
 )
 {
-	ScopedDisable lighting_lock(GL_LIGHTING);
-	ScopedEnable texture_2D_lock(GL_TEXTURE_2D);
-	ScopedBindTexture texture_lock(sphere_texture, GL_TEXTURE0);
-	ScopedUseProgram shader_lock(shader);
+//	ScopedDisable lighting_lock(GL_LIGHTING);
+//	ScopedEnable texture_2D_lock(GL_TEXTURE_2D);
+//	ScopedBindTexture texture_lock(sphere_texture, GL_TEXTURE0);
+//	ScopedUseProgram shader_lock(shader);
+//
+//	glUniform1i(glGetUniformLocation(shader, "texture"), 0);
 
-	glUniform1i(glGetUniformLocation(shader, "texture"), 0);
-
-	model.draw();
+	model.draw(myrank, ranks);
 }

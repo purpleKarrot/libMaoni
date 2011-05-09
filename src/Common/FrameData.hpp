@@ -19,9 +19,7 @@
 #ifndef FRAME_DATA_HPP
 #define FRAME_DATA_HPP
 
-#include <Maoni/Model.hpp>
 #include <Maoni/RenderAlgorithm.hpp>
-#include <Maoni/MeshLoader.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <string>
@@ -30,8 +28,7 @@
 class FrameData
 {
 public:
-	FrameData(RenderAlgorithm* algorithm_factory_stack,
-			MeshLoader* mesh_loader_stack);
+	FrameData(RenderAlgorithm* algorithm_factory_stack);
 
 	FrameData(FrameData const& other);
 
@@ -44,8 +41,6 @@ public:
 	{
 		return 1;
 	}
-
-	virtual void load_model(std::string const& filename);
 
 	virtual void set_render_algorithm(std::string const& name);
 
@@ -87,12 +82,6 @@ public:
 		for_each(algorithm_stack, function);
 	}
 
-	template<typename Function>
-	void for_each_loader(Function function) const
-	{
-		for_each(mesh_loader_stack, function);
-	}
-
 private:
 	void init();
 
@@ -115,9 +104,6 @@ protected:
 
 private:
 	RenderAlgorithm* algorithm_stack;
-	MeshLoader* mesh_loader_stack;
-
-	Model::Ptr model_;
 };
 
 #endif /* FRAME_DATA_HPP */

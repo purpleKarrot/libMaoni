@@ -23,18 +23,18 @@
 #include "Common/MainWindow.hpp"
 #include "Common/RenderWidget.hpp"
 
-BOOST_SYMBOL_EXPORT int maoni_main(int argc, char* argv[],
-		RenderAlgorithm* algorithm_stack, MeshLoader* mesh_loader_stack)
+extern "C" BOOST_SYMBOL_EXPORT int maoni_main(int argc, char* argv[],
+		RenderAlgorithm* algorithm_stack)
 {
 	QApplication app(argc, argv);
-	Q_INIT_RESOURCE(Resources);
-
+//	Q_INIT_RESOURCE(Resources);
+//
 //	QPixmap pixmap(":/Maoni/Splashscreen.jpg");
 //	QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
 //	splash.show();
 //	splash.showMessage("Loading Widgets...");
 
-	FrameData framedata(algorithm_stack, mesh_loader_stack);
+	FrameData framedata(algorithm_stack);
 
 	MainWindow main_window(framedata, new RenderWidget(framedata));
 	main_window.setWindowTitle("Maoni");

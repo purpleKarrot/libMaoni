@@ -22,7 +22,6 @@ public:
 private slots:
 	void about_qt();
 	void about_maoni();
-	void load_model();
 	void import_scene();
 	void export_scene();
 	void set_background_color();

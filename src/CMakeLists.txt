@@ -64,7 +64,7 @@ target_link_libraries(Maoni ${MAONI_LIBRARIES})
 boost_link_libraries(Maoni serialization)
 
 add_library(MaoniMain STATIC main.cpp)
-
+target_link_libraries(MaoniMain Maoni)
 
 install(TARGETS Maoni MaoniMain EXPORT Maoni
   ARCHIVE DESTINATION lib COMPONENT dev

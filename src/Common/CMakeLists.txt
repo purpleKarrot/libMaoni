@@ -32,16 +32,16 @@ qt4_wrap_cpp(COMMON_MOC
   TextOutput.hpp
   )
 
-qt4_add_resources(COMMON_QRC
-  Resources.qrc
-  )
+#qt4_add_resources(COMMON_QRC
+#  Resources.qrc
+#  )
 
 add_library(Common STATIC
   ${CMAKE_CURRENT_BINARY_DIR}/glew-1.5.5/src/glew.c
   ${COMMON_MOC}
-  ${COMMON_QRC}
+# ${COMMON_QRC}
   AlgorithmWidget.cpp
-  Gears.cpp
+  Gears.c
   FrameData.cpp
   MainWindow.cpp
   Path.cpp

@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Gears.hpp"
 #include <Maoni/glew.h>
-#include <cmath>
+#include <math.h>
 
 /**
  * Draw a gear wheel.  You'll probably want to call this function when
@@ -154,7 +153,7 @@ static void gear(GLfloat inner_radius, GLfloat outer_radius, GLfloat width, GLin
 	glEnd();
 }
 
-void Gears::draw() const
+void draw_gears()
 {
 	static int spin = 0;
 	GLfloat angle = ++spin / 20.f;

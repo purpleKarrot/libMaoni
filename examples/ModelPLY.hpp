@@ -1,6 +1,8 @@
 /*
- * libMaoni common viewing framework
- * Copyright (C) 2009 - 2011 Daniel Pfeifer
+ * libMaoni - common viewing framework
+ *
+ * Copyright (C) 2011 Daniel Pfeifer
+ * Visualization and Multimedia Lab, University of Zurich
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,14 +18,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAONI_GEARS_HPP
-#define MAONI_GEARS_HPP
+#include <Maoni.hpp>
 
-#include <Maoni/Model.hpp>
-
-struct Gears: Model
+class ModelPLY: public Path
 {
-	void draw() const;
-};
+public:
+	ModelPLY(const char* filename);
 
-#endif /* MAONI_GEARS_HPP */
+	virtual ~ModelPLY();
+
+	void draw(int myrank, int ranks) const;
+
+private:
+	void reset();
+	const char* const filter() const;
+
+	void read_file() const;
+
+private:
+	mutable std::size_t faces;
+	mutable GLuint vbuffer;
+	mutable GLuint ibuffer;
+};
