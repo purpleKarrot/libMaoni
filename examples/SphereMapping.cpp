@@ -34,16 +34,16 @@ SHADER_PROGRAM(SphereMappingShader,
 
 RENDER_ALGORITHM(SphereMapping,
 		(ShaderProgram, shader, SphereMappingShader())
-		(Texture, sphere_texture, "../examples/Models/sphere3.jpg")
-		(ModelPLY, model, "bunny.ply")
+		(Texture, sphere_texture, "../examples/data/sphere3.jpg")
+		(ModelPLY, model, "../examples/data/bunny.ply")
 )
 {
-//	ScopedDisable lighting_lock(GL_LIGHTING);
-//	ScopedEnable texture_2D_lock(GL_TEXTURE_2D);
-//	ScopedBindTexture texture_lock(sphere_texture, GL_TEXTURE0);
-//	ScopedUseProgram shader_lock(shader);
-//
-//	glUniform1i(glGetUniformLocation(shader, "texture"), 0);
+	ScopedDisable lighting_lock(GL_LIGHTING);
+	ScopedEnable texture_2D_lock(GL_TEXTURE_2D);
+	ScopedBindTexture texture_lock(sphere_texture, GL_TEXTURE0);
+	ScopedUseProgram shader_lock(shader);
+
+	glUniform1i(glGetUniformLocation(shader, "texture"), 0);
 
 	model.draw(myrank, ranks);
 }

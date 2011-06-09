@@ -3,6 +3,9 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(Maoni)
 
+find_package(Boost NO_MODULE)
+include("${Boost_USE_FILE}")
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 if(MSVC)
@@ -62,6 +65,7 @@ set(CPACK_DEBIAN_BUILD_DEPENDS
   libglew1.5-dev
   )
 
+set(CPACK_SOURCE_IGNORE_FILES "${Boost_BINARY_DIR}/;/\\\\.git")
 
 include(CPack)
-include(UploadPPA)
+include(BoostDebian)
