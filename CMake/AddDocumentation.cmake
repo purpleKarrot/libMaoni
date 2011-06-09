@@ -44,10 +44,11 @@ function(add_documentation input)
 
   boost_xsltproc("${doc}" "${Boost_RESOURCE_PATH}/docbook-xsl/xhtml.xsl" "${dbk}")
 
-  add_custom_target(doc DEPENDS "${doc}")
+  add_custom_target(documentation DEPENDS "${doc}")
 
   install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html/"
     DESTINATION "share/doc/Maoni"
     COMPONENT "doc"
+    CONFIGURATIONS Release
     )
 endfunction(add_documentation)

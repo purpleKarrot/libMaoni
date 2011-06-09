@@ -67,9 +67,33 @@ add_library(MaoniMain STATIC main.cpp)
 target_link_libraries(MaoniMain Maoni)
 
 install(TARGETS Maoni MaoniMain EXPORT Maoni
-  ARCHIVE DESTINATION lib COMPONENT dev
-  LIBRARY DESTINATION lib COMPONENT dev
-  RUNTIME DESTINATION bin
+  ARCHIVE
+    DESTINATION lib
+    COMPONENT dev
+    CONFIGURATIONS Release
+  LIBRARY
+    DESTINATION lib
+    COMPONENT bin
+    CONFIGURATIONS Release
+  RUNTIME
+    DESTINATION bin
+    COMPONENT bin
+    CONFIGURATIONS Release
+  )
+
+install(TARGETS Maoni MaoniMain EXPORT Maoni
+  ARCHIVE
+    DESTINATION lib
+    COMPONENT dbg
+    CONFIGURATIONS Debug
+  LIBRARY
+    DESTINATION lib
+    COMPONENT dbg
+    CONFIGURATIONS Debug
+  RUNTIME
+    DESTINATION bin
+    COMPONENT dbg
+    CONFIGURATIONS Debug
   )
 
 # install(EXPORT Maoni

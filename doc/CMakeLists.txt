@@ -11,8 +11,6 @@ include(AddDocumentation)
 boost_add_reference(maoni-ref
   ../include/Maoni/Color.hpp
   ../include/Maoni/Enum.hpp
-  ../include/Maoni/MeshLoader.hpp
-  ../include/Maoni/Model.hpp
   ../include/Maoni/RenderAlgorithm.hpp
   ../include/Maoni/ScopedLocks.hpp
   ../include/Maoni/ShaderProgram.hpp
