@@ -37,6 +37,7 @@
 #define EQUTE_HPP_INCLUDED
 
 #include <eq/eq.h>
+#include <eq/client/glWindow.h>
 
 template<typename Widget>
 struct eQute
@@ -52,7 +53,7 @@ struct eQute
 
 		static Widget* getInstance()
 		{
-			eq::base::ScopedMutex<> lock(instance);
+			co::base::ScopedMutex<> lock(instance);
 
 			Widget* tmp = instance.data;
 			instance = 0;
@@ -60,7 +61,7 @@ struct eQute
 		}
 
 	private:
-		static eq::base::Lockable<Widget*> instance;
+		static co::base::Lockable<Widget*> instance;
 	};
 
 	class GLWindow: public eq::GLWindow
@@ -115,14 +116,14 @@ struct eQute
 		}
 
 	private:
-		bool configInitOSWindow(const uint32_t id)
+		bool configInitSystemWindow(const uint32_t id)
 		{
 			Widget* widget = Widget::getInstance();
 
 			if (!widget)
 			{
 				// Share context only between Eq-created OS windows
-				eq::OSWindow* osWindow = getSharedContextWindow()->getOSWindow();
+				eq::SystemWindow* osWindow = getSharedContextWindow()->getSystemWindow();
 				if (dynamic_cast<GLWindow*> (osWindow))
 				{
 					const std::vector<eq::Window*>& windows = getPipe()->getWindows();
@@ -130,7 +131,7 @@ struct eQute
 					setSharedContextWindow(windows[1]);
 				}
 
-				return eq::Window::configInitOSWindow(id);
+				return eq::Window::configInitSystemWindow(id);
 			}
 
 			setOSWindow(new GLWindow(this, widget));
@@ -176,6 +177,6 @@ struct eQute
 };
 
 template<typename Widget>
-eq::base::Lockable<Widget*> eQute<Widget>::WidgetBase::instance;
+co::base::Lockable<Widget*> eQute<Widget>::WidgetBase::instance;
 
 #endif /* EQUTE_HPP_INCLUDED */

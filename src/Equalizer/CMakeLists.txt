@@ -1,11 +1,6 @@
 # Copyright (c) 2009, 2010 Daniel Pfeifer, University of Zurich
 
-find_package(Equalizer)
-
-if(NOT EQUALIZER_FOUND)
-  message(WARNING "Equalizer has NOT been found! Skipping MaoniEq.")
-  return()
-endif(NOT EQUALIZER_FOUND)
+find_package(Equalizer REQUIRED NO_MODULE)
 
 include_directories(${Equalizer_INCLUDE_DIRS})
 

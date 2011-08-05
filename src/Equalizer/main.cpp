@@ -38,12 +38,11 @@ private:
 #ifdef _MSC_VER
 __declspec(dllexport)
 #endif
-int maoni_main(int argc, char* argv[], //
-		RenderAlgorithm* algorithm_stack, MeshLoader* mesh_loader_stack)
+int maoni_main(int argc, char* argv[], RenderAlgorithm* algorithm_stack)
 {
-	eq::base::Log::level = eq::base::LOG_ERROR;
+	co::base::Log::level = co::base::LOG_ERROR;
 
-	FrameDataEq framedata(algorithm_stack, mesh_loader_stack);
+	FrameDataEq framedata(algorithm_stack);
 
 	NodeFactory node_factory(framedata);
 	if (!eq::init(argc, argv, &node_factory))
@@ -77,7 +76,7 @@ int maoni_main(int argc, char* argv[], //
 	if (!config->init(framedata.getID()))
 	{
 		std::cerr << "Config initialization failed: "
-				<< config->getErrorMessage() << std::endl;
+				<< config->getError() << std::endl;
 		return EXIT_FAILURE;
 	}
 

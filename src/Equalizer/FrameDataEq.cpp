@@ -22,8 +22,12 @@
 class Serializer: public AlgorithmConfig
 {
 public:
-	Serializer(eq::net::DataOStream& os) :
+	Serializer(co::DataOStream& os) :
 		os(os)
+	{
+	}
+
+	~Serializer()
 	{
 	}
 
@@ -67,19 +71,28 @@ private:
 	{
 	}
 
+	void property(const char*, Vec2& value)
+	{
+		os << value.data[0] << value.data[1];
+	}
+
+	void property(const char*, Vec3& value)
+	{
+		os << value.data[0] << value.data[1] << value.data[2];
+	}
+
+	void property(const char*, Vec4& value)
+	{
+		os << value.data[0] << value.data[1] << value.data[2] << value.data[3];
+	}
+
 private:
-	eq::net::DataOStream& os;
+	co::DataOStream& os;
 };
 
-void FrameDataEq::serialize(eq::net::DataOStream& os, const uint64_t dirty)
+void FrameDataEq::serialize(co::DataOStream& os, const uint64_t dirty)
 {
-	eq::Object::serialize(os, dirty);
-
-	if (dirty & DIRTY_LIGHT)
-		os << lights;
-
-	if (dirty & DIRTY_MODEL)
-		os << model_name;
+	co::Serializable::serialize(os, dirty);
 
 	if (dirty & DIRTY_RALGO)
 		os << ralgo_name;
@@ -94,10 +107,15 @@ void FrameDataEq::serialize(eq::net::DataOStream& os, const uint64_t dirty)
 class Deserializer: public AlgorithmConfig
 {
 public:
-	Deserializer(eq::net::DataIStream& is) :
+	Deserializer(co::DataIStream& is) :
 		is(is)
 	{
 	}
+
+	~Deserializer()
+	{
+	}
+
 private:
 	void property(const char*, int& value)
 	{
@@ -143,22 +161,29 @@ private:
 	void property(const char* name, ShaderProgram& value)
 	{
 	}
+
+	void property(const char*, Vec2& value)
+	{
+		is >> value.data[0] >> value.data[1];
+	}
+
+	void property(const char*, Vec3& value)
+	{
+		is >> value.data[0] >> value.data[1] >> value.data[2];
+	}
+
+	void property(const char*, Vec4& value)
+	{
+		is >> value.data[0] >> value.data[1] >> value.data[2] >> value.data[3];
+	}
+
 private:
-	eq::net::DataIStream& is;
+	co::DataIStream& is;
 };
 
-void FrameDataEq::deserialize(eq::net::DataIStream& is, const uint64_t dirty)
+void FrameDataEq::deserialize(co::DataIStream& is, const uint64_t dirty)
 {
-	eq::Object::deserialize(is, dirty);
-
-	if (dirty & DIRTY_LIGHT)
-		is >> lights;
-
-	if (dirty & DIRTY_MODEL)
-	{
-		is >> model_name;
-		FrameData::load_model(model_name);
-	}
+	co::Serializable::deserialize(is, dirty);
 
 	if (dirty & DIRTY_RALGO)
 	{
@@ -172,4 +197,3 @@ void FrameDataEq::deserialize(eq::net::DataIStream& is, const uint64_t dirty)
 		renderer->config(deserializer);
 	}
 }
-

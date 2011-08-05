@@ -25,7 +25,7 @@ public:
 	}
 
 private:
-	bool configInit(const uint32_t initID)
+	bool configInit(const eq::uint128_t& initID)
 	{
 		if (!eq::Node::configInit(initID))
 			return false;

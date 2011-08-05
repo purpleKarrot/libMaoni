@@ -22,11 +22,11 @@
 #define MAONI_RENDER_ALGORITHM_HPP
 
 #include <Maoni/detail/Extensible.hpp>
+#include <Maoni/Color.hpp>
 #include <Maoni/Vector.hpp>
+#include <Maoni/Path.hpp>
 
 class Enum;
-class Path;
-class Color;
 class ShaderProgram;
 
 /**

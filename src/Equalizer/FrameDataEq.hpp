@@ -22,11 +22,11 @@
 #include "../Common/FrameData.hpp"
 #include "EqInclude.hpp"
 
-class FrameDataEq: public FrameData, public eq::Object
+class FrameDataEq: public FrameData, public co::Serializable
 {
 public:
-	FrameDataEq(RenderAlgorithm* algorithm_stack, MeshLoader* mesh_loader_stack) :
-		FrameData(algorithm_stack, mesh_loader_stack)
+	FrameDataEq(RenderAlgorithm* algorithm_stack) :
+		FrameData(algorithm_stack)
 	{
 	}
 
@@ -35,35 +35,21 @@ public:
 	{
 	}
 
-	virtual void load_model(const std::string& filename)
-	{
-		setDirty(DIRTY_MODEL);
-		FrameData::load_model(filename);
-	}
-
 	virtual void set_render_algorithm(std::string const& name)
 	{
 		setDirty(DIRTY_RALGO);
 		FrameData::set_render_algorithm(name);
 	}
 
-	virtual Light& light(std::size_t i)
-	{
-		setDirty(DIRTY_LIGHT);
-		return FrameData::light(i);
-	}
+	void serialize(co::DataOStream& os, const uint64_t dirty);
 
-	void serialize(eq::net::DataOStream& os, const uint64_t dirty);
-
-	void deserialize(eq::net::DataIStream& is, const uint64_t dirty);
+	void deserialize(co::DataIStream& is, const uint64_t dirty);
 
 private:
 	enum DirtyBits
 	{
-		DIRTY_LIGHT = DIRTY_CUSTOM << 1,
-		DIRTY_MODEL = DIRTY_CUSTOM << 2,
-		DIRTY_RALGO = DIRTY_CUSTOM << 3,
-		DIRTY_RENDERER = DIRTY_CUSTOM << 4
+		DIRTY_RALGO = DIRTY_CUSTOM << 1,
+		DIRTY_RENDERER = DIRTY_CUSTOM << 2
 	};
 };
 

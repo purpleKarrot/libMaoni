@@ -20,11 +20,11 @@
 #include <Maoni/glew.h>
 #include <boost/mpi/collectives.hpp>
 #include "../Common/serialize.hpp"
-#include <GL/ice-t_mpi.h>
 
-FrameDataIceT::FrameDataIceT(RenderAlgorithm* algorithm_stack,
-		MeshLoader* mesh_loader_stack) :
-	FrameData(algorithm_stack, mesh_loader_stack), //
+#include <IceTMPI.h>
+
+FrameDataIceT::FrameDataIceT(RenderAlgorithm* algorithm_stack) :
+	FrameData(algorithm_stack), //
 			world(), tiles(world.size()), strategy_(3), //
 			replication_group_(false), change(127)
 {
@@ -114,7 +114,7 @@ void FrameDataIceT::animate()
 			icetStrategy(ICET_STRATEGY_DIRECT);
 			break;
 		case 1:
-			icetStrategy(ICET_STRATEGY_SERIAL);
+			//icetStrategy(ICET_STRATEGY_SERIAL);
 			break;
 		case 2:
 			icetStrategy(ICET_STRATEGY_SPLIT);
@@ -128,18 +128,6 @@ void FrameDataIceT::animate()
 		default:
 			icetStrategy(ICET_STRATEGY_REDUCE);
 		}
-	}
-
-	if (change & LIGHT_CHANGED)
-	{
-		broadcast(world, lights, 0);
-	}
-
-	if (change & MODEL_CHANGED)
-	{
-		broadcast(world, model_name, 0);
-		if (!master())
-			load_model(model_name.c_str());
 	}
 
 	if (change & RENDERER_CHANGED)

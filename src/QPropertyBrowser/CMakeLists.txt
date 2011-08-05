@@ -10,15 +10,13 @@ include_directories(
   )
 
 # http://get.qt.nokia.com/qt/solutions/lgpl/qtpropertybrowser-2.5_1-opensource.tar.gz
-boost_extract(
+boost_extract(browser
   ${CMAKE_CURRENT_SOURCE_DIR}/qtpropertybrowser-2.5_1-opensource.tar.gz
-  ${CMAKE_CURRENT_BINARY_DIR}/browser
   )
 
 # http://doc.trolltech.com/qq/qq18-propertybrowser-code.zip
-boost_extract(
+boost_extract(browser-ext
   ${CMAKE_CURRENT_SOURCE_DIR}/qq18-propertybrowser-extension.tar.gz
-  ${CMAKE_CURRENT_BINARY_DIR}/browser-ext
   )
 
 set(QT_PROPERTY_BROWSER_SRC

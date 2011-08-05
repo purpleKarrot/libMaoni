@@ -38,11 +38,14 @@ function(add_documentation input)
     DEPENDS ${qbk} ${DOC_UNPARSED_ARGUMENTS}
     )
 
-  boost_xsltproc("${dbk}" "${BOOSTBOOK_XSL_DIR}/docbook.xsl" "${xml}"
+  xsltproc("${dbk}" "${BOOSTBOOK_XSL_DIR}/docbook.xsl" "${xml}"
+    CATALOG "${BOOSTBOOK_CATALOG}"
     DEPENDS ${xml} ${DOC_UNPARSED_ARGUMENTS}
     )
 
-  boost_xsltproc("${doc}" "${Boost_RESOURCE_PATH}/docbook-xsl/xhtml.xsl" "${dbk}")
+  xsltproc("${doc}" "${Boost_RESOURCE_PATH}/docbook-xsl/xhtml.xsl" "${dbk}"
+    CATALOG "${BOOSTBOOK_CATALOG}"
+    )
 
   add_custom_target(documentation DEPENDS "${doc}")
 

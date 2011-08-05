@@ -26,6 +26,7 @@
 
 namespace mpi = boost::mpi;
 typedef boost::array<double, 32> amatrix;
+
 BOOST_IS_MPI_DATATYPE(amatrix)
 //BOOST_CLASS_TRACKING(amatrix,track_never)
 BOOST_IS_BITWISE_SERIALIZABLE(amatrix)
@@ -34,31 +35,14 @@ BOOST_CLASS_IMPLEMENTATION(amatrix,object_serializable)
 class FrameDataIceT: public FrameData
 {
 public:
-	FrameDataIceT(RenderAlgorithm* algorithm_stack,
-			MeshLoader* mesh_loader_stack);
-	~FrameDataIceT();
+	FrameDataIceT(RenderAlgorithm* algorithm_stack);
 
-	virtual void load_model(std::string const& filename)
-	{
-		setModelChanged();
-		FrameData::load_model(filename);
-	}
+	virtual ~FrameDataIceT();
 
 	virtual void set_render_algorithm(std::string const& name)
 	{
 		setRendererChanged();
 		FrameData::set_render_algorithm(name);
-	}
-
-	virtual Light& light(std::size_t i)
-	{
-		setLightChanged();
-		return FrameData::light(i);
-	}
-
-	virtual const Light& light(std::size_t i) const
-	{
-		return FrameData::light(i);
 	}
 
 	//! return if these settings belong to the master
@@ -106,16 +90,6 @@ public:
 	virtual int getMHeight() const
 	{
 		return render_context_height;
-	}
-
-	virtual void setLightChanged()
-	{
-		change |= LIGHT_CHANGED;
-	}
-
-	virtual void setModelChanged()
-	{
-		change |= MODEL_CHANGED;
 	}
 
 	virtual void setRenderParamChanged()
@@ -177,8 +151,6 @@ private:
 
 	enum change_bits
 	{
-		LIGHT_CHANGED = 1,
-		MODEL_CHANGED = 2,
 		RENDERPARAM_CHANGED = 4,
 		RENDERER_CHANGED = 8,
 		TILES_CHANGED = 16,

@@ -17,8 +17,9 @@
  */
 
 #include "RenderWidget.hpp"
-#include <GL/ice-t_mpi.h>
 #include <boost/assert.hpp>
+#include <IceTMPI.h>
+#include <IceTGL.h>
 
 RenderWidgetIceT* RenderWidgetIceT::singleton = 0;
 
@@ -34,7 +35,7 @@ RenderWidgetIceT::RenderWidgetIceT(FrameData& framedata) :
 	icetDestroyMPICommunicator(communicator);
 
 	glClearColor(0.2f, 0.5f, 0.1f, 1.0f);
-	icetDrawFunc(static_draw);
+	icetGLDrawCallback(static_draw);
 
 	// slaves should animate from the beginning
 	if (!framedata_icet.master())
@@ -68,7 +69,7 @@ void RenderWidgetIceT::paintGL()
 
 	preDraw();
 	framedata_icet.setMatrices();
-	icetDrawFrame();
+	icetGLDrawFrame();
 	postDraw();
 }
 

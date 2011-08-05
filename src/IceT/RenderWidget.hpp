@@ -21,7 +21,7 @@
 
 #include "../Common/RenderWidget.hpp"
 #include "FrameData.hpp"
-#include <GL/ice-t.h>
+#include <IceT.h>
 
 class RenderWidgetIceT: public RenderWidget
 {

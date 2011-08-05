@@ -28,8 +28,7 @@
 #ifdef _MSC_VER
 __declspec(dllexport)
 #endif
-int maoni_main(int argc, char* argv[], //
-		RenderAlgorithm* algorithm_stack, MeshLoader* mesh_loader_stack)
+int maoni_main(int argc, char* argv[], RenderAlgorithm* algorithm_stack)
 {
 	boost::mpi::environment env(argc, argv);
 	QApplication app(argc, argv);
@@ -38,7 +37,7 @@ int maoni_main(int argc, char* argv[], //
 	QPixmap pixmap(":/Maoni/Splashscreen.jpg");
 	QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
 
-	FrameDataIceT framedata(algorithm_stack, mesh_loader_stack);
+	FrameDataIceT framedata(algorithm_stack);
 
 	RenderWidgetIceT* icet_widget = new RenderWidgetIceT(framedata);
 
