@@ -39,8 +39,8 @@ function(add_documentation input)
     )
 
   xsltproc("${dbk}" "${BOOSTBOOK_XSL_DIR}/docbook.xsl" "${xml}"
-    CATALOG "${BOOSTBOOK_CATALOG}"
     DEPENDS ${xml} ${DOC_UNPARSED_ARGUMENTS}
+    CATALOG "${BOOSTBOOK_CATALOG}"
     )
 
   xsltproc("${doc}" "${Boost_RESOURCE_PATH}/docbook-xsl/xhtml.xsl" "${dbk}"

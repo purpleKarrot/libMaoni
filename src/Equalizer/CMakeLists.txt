@@ -25,3 +25,5 @@ target_link_libraries(MaoniEq
   ${MAONI_LIBRARIES}
   ${Equalizer_LIBRARIES}
   )
+
+set(install_targets ${install_targets} MaoniEq PARENT_SCOPE)

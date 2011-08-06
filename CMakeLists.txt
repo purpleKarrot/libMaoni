@@ -6,7 +6,7 @@ project(Maoni)
 find_package(Boost NO_MODULE)
 include("${Boost_USE_FILE}")
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 if(MSVC)
   add_definitions(
@@ -22,11 +22,10 @@ endif(NOT WIN32)
 list(APPEND CMAKE_MODULE_PATH ${Maoni_SOURCE_DIR}/CMake)
 
 include_directories(BEFORE SYSTEM include)
-install(DIRECTORY include/Maoni DESTINATION include COMPONENT dev)
-install(FILES include/Maoni.hpp DESTINATION include COMPONENT dev)
-
-option(MAONI_SKIP_EQUALIZER "Do not build libMaoniEq" ON)
-option(MAONI_SKIP_ICET "Do not build libMaoniIceT" ON)
+install(DIRECTORY include/
+  DESTINATION include
+  COMPONENT dev
+  )
 
 add_subdirectory(doc)
 add_subdirectory(src)
@@ -62,7 +61,6 @@ set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/src/Icons/stanford-bunny.ico")
 
 set(CPACK_DEBIAN_BUILD_DEPENDS
   boost-cmake
-  libboost-compatibility-dev
   libboost-serialization-dev
   libboost-iostreams-dev
   libqglviewer-qt4-dev

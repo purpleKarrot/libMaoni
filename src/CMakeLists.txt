@@ -55,10 +55,6 @@ if(MSVC)
 endif(MSVC)
 
 
-add_subdirectory(Equalizer)
-add_subdirectory(IceT)
-
-
 add_library(Maoni SHARED Maoni.cpp ${MAONI_VERSION_RC})
 target_link_libraries(Maoni ${MAONI_LIBRARIES})
 boost_link_libraries(Maoni serialization)
@@ -66,7 +62,14 @@ boost_link_libraries(Maoni serialization)
 add_library(MaoniMain STATIC main.cpp)
 target_link_libraries(MaoniMain Maoni)
 
-install(TARGETS Maoni MaoniMain EXPORT Maoni
+set(install_targets Maoni MaoniMain)
+
+#add_subdirectory(Equalizer)
+#add_subdirectory(IceT)
+
+set_property(TARGET ${install_targets} PROPERTY DEBUG_POSTFIX "_d")
+
+install(TARGETS ${install_targets} EXPORT Release
   ARCHIVE
     DESTINATION lib
     COMPONENT dev
@@ -81,7 +84,7 @@ install(TARGETS Maoni MaoniMain EXPORT Maoni
     CONFIGURATIONS Release
   )
 
-install(TARGETS Maoni MaoniMain EXPORT Maoni
+install(TARGETS ${install_targets} EXPORT Debug
   ARCHIVE
     DESTINATION lib
     COMPONENT dbg
@@ -96,7 +99,22 @@ install(TARGETS Maoni MaoniMain EXPORT Maoni
     CONFIGURATIONS Debug
   )
 
-# install(EXPORT Maoni
-#   DESTINATION share/Maoni
-#   COMPONENT dev
-#   )
+install(EXPORT Release
+  DESTINATION share/Maoni
+  FILE Maoni.cmake
+  CONFIGURATIONS Release
+  COMPONENT dev
+  )
+
+install(EXPORT Debug
+  DESTINATION share/Maoni
+  FILE Maoni.cmake
+  CONFIGURATIONS Debug
+  COMPONENT dbg
+  )
+
+install(FILES MaoniConfig.cmake MaoniConfigVersion.cmake
+  DESTINATION share/Maoni
+  CONFIGURATIONS Release
+  COMPONENT dev
+  )
