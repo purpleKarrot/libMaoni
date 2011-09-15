@@ -1,14 +1,12 @@
 # Copyright (c) 2010-2011 Daniel Pfeifer, University of Zurich
 
 include(BoostExtract)
-include(BoostDownload)
 include(BoostForwardFile)
 
-boost_download(qglviewer.tgz
-  http://www.libqglviewer.com/src/libQGLViewer-2.3.9.tar.gz
-  a882cb3a8da4ee904a33b46ebb44f905
+boost_extract(qglviewer DOWNLOAD
+  http://www.libqglviewer.com/src/libQGLViewer-2.3.10.tar.gz
+  259538c7036b4ae5fe3ed5d4299c8d31
   )
-boost_extract(qglviewer.tgz qglviewer)
 
 set(qglviewer_dir "${CMAKE_CURRENT_BINARY_DIR}/qglviewer/QGLViewer")
 
@@ -21,7 +19,7 @@ qt4_wrap_ui(QGLVIEWER_UI
 
 boost_forward_file(
   "${CMAKE_CURRENT_BINARY_DIR}/ui_ImageInterface.h"
-  "${CMAKE_BINARY_DIR}/include/ui_ImageInterface.Qt4.h"
+  "${CMAKE_CURRENT_BINARY_DIR}/ui_ImageInterface.Qt4.h"
   )
 
 qt4_wrap_cpp(QGLVIEWER_MOC
