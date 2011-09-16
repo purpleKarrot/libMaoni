@@ -64,7 +64,6 @@ set(CPACK_DEBIAN_BUILD_DEPENDS
   libboost-serialization-dev
   libboost-iostreams-dev
   libqglviewer-qt4-dev
-  libglew1.5-dev
   )
 
 set(CPACK_SOURCE_IGNORE_FILES "${Maoni_BINARY_DIR}/;/\\\\.git")

@@ -17,7 +17,7 @@
  */
 
 #include "FrameData.hpp"
-#include <Maoni/glew.h>
+#include <Maoni.hpp>
 #include <boost/mpi/collectives.hpp>
 #include "../Common/serialize.hpp"
 

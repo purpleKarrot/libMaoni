@@ -16,7 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Maoni/glew.h>
+#ifdef MACOSX
+# include <OpenGL/gl.h>
+#else
+# include <GL/gl.h>
+#endif
+
 #include <math.h>
 
 /**

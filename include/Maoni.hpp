@@ -21,7 +21,13 @@
 #ifndef MAONI_HPP
 #define MAONI_HPP
 
-#include <Maoni/glew.h>
+#ifdef MACOSX
+# include <OpenGL/gl.h>
+#else
+# define GL_GLEXT_PROTOTYPES 1
+# include <GL/gl.h>
+#endif
+
 #include <Maoni/Color.hpp>
 #include <Maoni/Enum.hpp>
 #include <Maoni/RenderAlgorithm.hpp>

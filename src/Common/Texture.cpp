@@ -16,9 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Maoni/glew.h>
-#include <Maoni/Texture.hpp>
-#include <Maoni/ScopedLocks.hpp>
+#include <Maoni.hpp>
 
 #include <QImage>
 #include <QGLWidget>

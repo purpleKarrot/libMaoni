@@ -21,7 +21,7 @@
 #ifndef MAONI_DETAIL_SCOPED_LOCKS_HPP
 #define MAONI_DETAIL_SCOPED_LOCKS_HPP
 
-#include <Maoni/glew.h>
+#include <Maoni.hpp>
 
 namespace detail
 {

@@ -18,7 +18,6 @@ public:
 	virtual ~RenderWidget();
 
 private:
-	void init();
 	QString helpString() const;
 
 protected:
