@@ -21,7 +21,7 @@
 #ifndef MAONI_HPP
 #define MAONI_HPP
 
-#ifdef MACOSX
+#ifdef __APPLE__
 # include <OpenGL/gl.h>
 #else
 # define GL_GLEXT_PROTOTYPES 1

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef MACOSX
+#ifdef __APPLE__
 # include <OpenGL/gl.h>
 #else
 # include <GL/gl.h>
